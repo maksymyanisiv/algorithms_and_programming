@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 4.4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #000; padding: 40px 20px; }
+        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; }
+        .section-title { text-align: center; font-size: 1.8rem; margin: 50px 0 30px; border-bottom: 3px solid #000; padding-bottom: 10px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .formula-box { background: #f9f9f9; border: 2px solid #000; border-radius: 8px; padding: 25px; max-width: 900px; margin: 0 auto 50px; }
+        .formula-box h3 { margin-bottom: 15px; font-size: 1.3rem; }
+        .formula { font-family: 'Cambria Math', serif; font-size: 1.1rem; line-height: 2; padding-left: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1600px; margin: 0 auto; }
+        .diagram-section { background: #fff; border: 2px solid #000; border-radius: 8px; padding: 15px; flex: 1; min-width: 320px; max-width: 420px; }
+        .diagram-section h2 { text-align: center; font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+        svg { display: block; margin: 0 auto; }
+        .terminal, .process, .decision, .io { fill: #fff; stroke: #000; stroke-width: 2; }
+        .arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+        text { font-family: 'Segoe UI', sans-serif; fill: #000; font-size: 9px; text-anchor: middle; }
+        .label { font-size: 8px; font-weight: bold; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .results-table th, .results-table td { border: 1px solid #000; padding: 8px; text-align: center; font-size: 0.9rem; }
+        .results-table th { background: #f0f0f0; }
+        .graph-box { background: #fff; border: 2px solid #000; border-radius: 8px; padding: 20px; max-width: 500px; margin: 30px auto; }
+        @media (max-width: 1200px) { .diagram-section { min-width: 100%; max-width: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №4.4</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            Обчислити і вивести на екран у вигляді таблиці значення функції, заданої графічно,<br>
+            на проміжку від X<sub>поч</sub> до X<sub>кін</sub> з кроком dX.<br><br>
+            <b>Функція y(x) за графіком:</b><br>
+            <table style="margin-left: 30px; margin-top: 10px;">
+                <tr><td>y = x + R + 1</td><td>, якщо x ≤ -1 (лінія під 45°)</td></tr>
+                <tr><td>y = √(R² - x²)</td><td>, якщо -1 < x ≤ 0 (дуга кола)</td></tr>
+                <tr><td>y = R</td><td>, якщо 0 < x ≤ 1 (горизонталь)</td></tr>
+                <tr><td>y = 2R+1 - (R+1)x</td><td>, якщо 1 < x ≤ 2 (похила)</td></tr>
+                <tr><td>y = -1</td><td>, якщо x > 2 (горизонталь)</td></tr>
+            </table>
+            <br>
+            Параметри R, X<sub>поч</sub>, X<sub>кін</sub>, dX вводяться з клавіатури.
+        </div>
+    </div>
+    
+    <!-- Графік функції -->
+    <div class="graph-box">
+        <h3 style="text-align: center; margin-bottom: 15px;">Графік функції y(x) при R=1</h3>
+        <svg width="450" height="280" viewBox="0 0 450 280">
+            <!-- Осі -->
+            <line x1="50" y1="200" x2="420" y2="200" stroke="#000" stroke-width="2" marker-end="url(#arrowX)"/>
+            <line x1="200" y1="260" x2="200" y2="30" stroke="#000" stroke-width="2" marker-end="url(#arrowY)"/>
+            <defs>
+                <marker id="arrowX" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+                </marker>
+                <marker id="arrowY" markerWidth="10" markerHeight="7" refX="3.5" refY="0" orient="auto">
+                    <polygon points="0 10, 3.5 0, 7 10" fill="#000"/>
+                </marker>
+            </defs>
+            
+            <!-- Підписи осей -->
+            <text x="415" y="220" font-size="14">x</text>
+            <text x="210" y="40" font-size="14">y</text>
+            
+            <!-- Мітки на осі X -->
+            <line x1="100" y1="195" x2="100" y2="205" stroke="#000" stroke-width="1"/>
+            <text x="100" y="220" font-size="11">-2</text>
+            <line x1="150" y1="195" x2="150" y2="205" stroke="#000" stroke-width="1"/>
+            <text x="150" y="220" font-size="11">-1</text>
+            <text x="200" y="220" font-size="11">0</text>
+            <line x1="250" y1="195" x2="250" y2="205" stroke="#000" stroke-width="1"/>
+            <text x="250" y="220" font-size="11">1</text>
+            <line x1="300" y1="195" x2="300" y2="205" stroke="#000" stroke-width="1"/>
+            <text x="300" y="220" font-size="11">2</text>
+            <line x1="350" y1="195" x2="350" y2="205" stroke="#000" stroke-width="1"/>
+            <text x="350" y="220" font-size="11">3</text>
+            
+            <!-- Мітки на осі Y -->
+            <line x1="195" y1="150" x2="205" y2="150" stroke="#000" stroke-width="1"/>
+            <text x="185" y="155" font-size="11">R</text>
+            <line x1="195" y1="250" x2="205" y2="250" stroke="#000" stroke-width="1"/>
+            <text x="180" y="255" font-size="11">-1</text>
+            
+            <!-- Графік функції -->
+            <!-- 1. x ≤ -1: y = x + R + 1 (лінія 45°) -->
+            <line x1="50" y1="200" x2="150" y2="150" stroke="#000" stroke-width="2"/>
+            
+            <!-- 2. -1 < x ≤ 0: дуга кола -->
+            <path d="M 150 150 Q 175 100, 200 150" stroke="#000" stroke-width="2" fill="none"/>
+            
+            <!-- 3. 0 < x ≤ 1: y = R -->
+            <line x1="200" y1="150" x2="250" y2="150" stroke="#000" stroke-width="2"/>
+            
+            <!-- 4. 1 < x ≤ 2: похила лінія -->
+            <line x1="250" y1="150" x2="300" y2="250" stroke="#000" stroke-width="2"/>
+            
+            <!-- 5. x > 2: y = -1 -->
+            <line x1="300" y1="250" x2="400" y2="250" stroke="#000" stroke-width="2"/>
+            
+            <!-- Точки переходу -->
+            <circle cx="150" cy="150" r="4" fill="#000"/>
+            <circle cx="200" cy="150" r="4" fill="#000"/>
+            <circle cx="250" cy="150" r="4" fill="#000"/>
+            <circle cx="300" cy="250" r="4" fill="#000"/>
+            
+            <!-- Підпис 45° -->
+            <text x="90" y="165" font-size="10">45°</text>
+        </svg>
+    </div>
+    
+    <!-- БЛОК-СХЕМИ -->
+    <h2 class="section-title">Блок-схеми алгоритмів</h2>
+    
+    <div class="container">
+        <!-- y(x) -->
+        <div class="diagram-section">
+            <h2>y(x, R) - функція за графіком</h2>
+            <svg width="380" height="500" viewBox="0 0 380 500">
+                <defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <ellipse class="terminal" cx="190" cy="22" rx="45" ry="14"/>
+                <text x="190" y="26">y(x, R)</text>
+                <path class="arrow" d="M190,36 L190,55"/>
+                
+                <!-- Перевірка 1: x ≤ -1 -->
+                <polygon class="decision" points="190,60 270,95 190,130 110,95"/>
+                <text x="190" y="98">x ≤ -1?</text>
+                <path class="arrow" d="M110,95 L60,95 L60,145"/>
+                <text class="label" x="85" y="87">Так</text>
+                <rect class="process" x="15" y="150" width="100" height="30" rx="3"/>
+                <text x="65" y="169" font-size="8">y = x + R + 1</text>
+                
+                <path class="arrow" d="M270,95 L320,95 L320,135"/>
+                <text class="label" x="290" y="87">Ні</text>
+                
+                <!-- Перевірка 2: x ≤ 0 -->
+                <polygon class="decision" points="320,140 370,170 320,200 270,170"/>
+                <text x="320" y="173">x ≤ 0?</text>
+                <path class="arrow" d="M270,170 L220,170 L220,215"/>
+                <text class="label" x="245" y="162">Так</text>
+                <rect class="process" x="150" y="220" width="140" height="30" rx="3"/>
+                <text x="220" y="239" font-size="8">y = √(R² - x²)</text>
+                
+                <path class="arrow" d="M320,200 L320,235"/>
+                <text class="label" x="330" y="218">Ні</text>
+                
+                <!-- Перевірка 3: x ≤ 1 -->
+                <polygon class="decision" points="320,240 370,270 320,300 270,270"/>
+                <text x="320" y="273">x ≤ 1?</text>
+                <path class="arrow" d="M270,270 L220,270 L220,310"/>
+                <text class="label" x="245" y="262">Так</text>
+                <rect class="process" x="170" y="315" width="100" height="30" rx="3"/>
+                <text x="220" y="334" font-size="8">y = R</text>
+                
+                <path class="arrow" d="M320,300 L320,340"/>
+                <text class="label" x="330" y="320">Ні</text>
+                
+                <!-- Перевірка 4: x ≤ 2 -->
+                <polygon class="decision" points="320,345 370,375 320,405 270,375"/>
+                <text x="320" y="378">x ≤ 2?</text>
+                <path class="arrow" d="M270,375 L220,375 L220,415"/>
+                <text class="label" x="245" y="367">Так</text>
+                <rect class="process" x="135" y="420" width="170" height="30" rx="3"/>
+                <text x="220" y="439" font-size="7">y = 2R+1-(R+1)x</text>
+                
+                <path class="arrow" d="M320,405 L320,420"/>
+                <text class="label" x="330" y="413">Ні</text>
+                <rect class="process" x="280" y="425" width="80" height="30" rx="3"/>
+                <text x="320" y="444" font-size="8">y = -1</text>
+                
+                <!-- Збір гілок -->
+                <path class="arrow" d="M65,180 L65,470 L190,470"/>
+                <path class="arrow" d="M220,250 L150,250 L150,470 L190,470"/>
+                <path class="arrow" d="M220,345 L140,345 L140,470 L190,470"/>
+                <path class="arrow" d="M220,450 L220,470 L190,470"/>
+                <path class="arrow" d="M320,455 L320,470 L200,470"/>
+                
+                <path class="arrow" d="M190,470 L190,490"/>
+                <ellipse class="terminal" cx="190" cy="495" rx="35" ry="10"/>
+                <text x="190" y="498" font-size="8">return y</text>
+            </svg>
+        </div>
+        
+        <!-- while -->
+        <div class="diagram-section">
+            <h2>1. while - табулювання</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">tabulate(xStart,xEnd,dx,R)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="70" y="60" width="160" height="25" rx="3"/>
+                <text x="150" y="76">x = xStart</text>
+                <path class="arrow" d="M150,85 L150,110"/>
+                <polygon class="decision" points="150,115 230,155 150,195 70,155"/>
+                <text x="150" y="158">x ≤ xEnd?</text>
+                <path class="arrow" d="M230,155 L270,155 L270,310 L160,310"/>
+                <text class="label" x="245" y="147">Ні</text>
+                <path class="arrow" d="M150,195 L150,220"/>
+                <text class="label" x="165" y="205">Так</text>
+                <polygon class="io" points="70,225 230,225 220,255 80,255"/>
+                <text x="150" y="244">print x, y(x,R)</text>
+                <path class="arrow" d="M150,255 L150,275 L40,275 L40,155 L70,155"/>
+                <rect class="process" x="25" y="263" width="55" height="20" rx="2"/>
+                <text x="52" y="277" font-size="7">x += dx</text>
+                <path class="arrow" d="M150,310 L150,345"/>
+                <ellipse class="terminal" cx="150" cy="360" rx="35" ry="12"/>
+                <text x="150" y="364">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- for x+=dx -->
+        <div class="diagram-section">
+            <h2>3. for (x+=dx) - табулювання</h2>
+            <svg width="300" height="350" viewBox="0 0 300 350">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">tabulate(xStart,xEnd,dx,R)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="70" y="60" width="160" height="25" rx="3"/>
+                <text x="150" y="76">x = xStart</text>
+                <path class="arrow" d="M150,85 L150,110"/>
+                <polygon class="decision" points="150,115 230,155 150,195 70,155"/>
+                <text x="150" y="158">x ≤ xEnd?</text>
+                <path class="arrow" d="M230,155 L270,155 L270,280 L160,280"/>
+                <text class="label" x="245" y="147">Ні</text>
+                <path class="arrow" d="M150,195 L150,215"/>
+                <text class="label" x="165" y="205">Так</text>
+                <polygon class="io" points="70,220 230,220 220,250 80,250"/>
+                <text x="150" y="239">print x, y(x,R)</text>
+                <path class="arrow" d="M150,250 L150,265 L40,265 L40,155 L70,155"/>
+                <rect class="process" x="25" y="253" width="55" height="20" rx="2"/>
+                <text x="52" y="267" font-size="7">x += dx</text>
+                <path class="arrow" d="M150,280 L150,315"/>
+                <ellipse class="terminal" cx="150" cy="330" rx="35" ry="12"/>
+                <text x="150" y="334">Кінець</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- UML ACTIVITY ДІАГРАМИ -->
+    <h2 class="section-title">UML-діаграми дій</h2>
+    
+    <div class="container">
+        <!-- UML y(x) -->
+        <div class="diagram-section">
+            <h2>y(x) - UML Activity</h2>
+            <svg width="400" height="450" viewBox="0 0 400 450">
+                <defs><marker id="uml-arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <circle fill="#000" cx="200" cy="18" r="8"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M200,26 L200,50"/>
+                
+                <!-- Decision 1 -->
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="200,55 270,90 200,125 130,90"/>
+                <text x="200" y="93" font-size="8">[x ≤ -1]</text>
+                
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M130,90 L70,90 L70,130"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="20" y="135" width="110" height="28" rx="10"/>
+                <text x="75" y="153" font-size="8">y := x+R+1</text>
+                
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M270,90 L330,90 L330,130"/>
+                
+                <!-- Decision 2 -->
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="330,135 380,165 330,195 280,165"/>
+                <text x="330" y="168" font-size="8">[x ≤ 0]</text>
+                
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M280,165 L220,165 L220,200"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="150" y="205" width="140" height="28" rx="10"/>
+                <text x="220" y="223" font-size="7">y := √(R²-x²)</text>
+                
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M330,195 L330,225"/>
+                
+                <!-- Decision 3 -->
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="330,230 380,260 330,290 280,260"/>
+                <text x="330" y="263" font-size="8">[x ≤ 1]</text>
+                
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M280,260 L220,260 L220,295"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="170" y="300" width="100" height="28" rx="10"/>
+                <text x="220" y="318" font-size="8">y := R</text>
+                
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M330,290 L330,315"/>
+                
+                <!-- Decision 4 -->
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="330,320 380,350 330,380 280,350"/>
+                <text x="330" y="353" font-size="8">[x ≤ 2]</text>
+                
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M280,350 L220,350 L220,385"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="135" y="390" width="170" height="28" rx="10"/>
+                <text x="220" y="408" font-size="7">y := 2R+1-(R+1)x</text>
+                
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M330,380 L330,390"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="295" y="395" width="70" height="28" rx="10"/>
+                <text x="330" y="413" font-size="8">y := -1</text>
+                
+                <!-- Merge and end -->
+                <rect x="130" y="435" width="180" height="4" rx="2" fill="#000"/>
+                <path stroke="#000" stroke-width="2" fill="none" d="M75,163 L75,430"/>
+                <path stroke="#000" stroke-width="2" fill="none" d="M220,233 L140,233 L140,430"/>
+                <path stroke="#000" stroke-width="2" fill="none" d="M220,328 L150,328 L150,430"/>
+                <path stroke="#000" stroke-width="2" fill="none" d="M220,418 L220,430"/>
+                <path stroke="#000" stroke-width="2" fill="none" d="M330,423 L330,430"/>
+            </svg>
+        </div>
+        
+        <!-- UML while -->
+        <div class="diagram-section">
+            <h2>while - UML Activity</h2>
+            <svg width="280" height="320" viewBox="0 0 280 320">
+                <circle fill="#000" cx="140" cy="18" r="8"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,26 L140,45"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="60" y="50" width="160" height="28" rx="10"/>
+                <text x="140" y="68">x := xStart</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,78 L140,100"/>
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="140,105 210,140 140,175 70,140"/>
+                <text x="140" y="143" font-size="8">[x ≤ xEnd]</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,175 L140,200"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="40" y="205" width="200" height="28" rx="10"/>
+                <text x="140" y="223" font-size="8">print(x, y(x,R)); x += dx</text>
+                <path stroke="#000" stroke-width="2" fill="none" d="M140,233 L140,250 L30,250 L30,140 L70,140"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M210,140 L250,140 L250,280 L150,280"/>
+                <text x="225" y="132" font-size="7">[else]</text>
+                <circle fill="none" stroke="#000" stroke-width="2" cx="140" cy="295" r="8"/>
+                <circle fill="#000" cx="140" cy="295" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML for -->
+        <div class="diagram-section">
+            <h2>for - UML Activity (loop)</h2>
+            <svg width="280" height="280" viewBox="0 0 280 280">
+                <circle fill="#000" cx="140" cy="18" r="8"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,26 L140,50"/>
+                <rect fill="none" stroke="#000" stroke-width="1" stroke-dasharray="4,2" x="30" y="55" width="220" height="130" rx="5"/>
+                <text x="55" y="72" font-size="8" font-weight="bold">«loop» [x = xStart..xEnd, step dx]</text>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="50" y="90" width="180" height="28" rx="10"/>
+                <text x="140" y="108" font-size="8">print(x, y(x,R))</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,185 L140,220"/>
+                <circle fill="none" stroke="#000" stroke-width="2" cx="140" cy="240" r="8"/>
+                <circle fill="#000" cx="140" cy="240" r="4"/>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Приклад таблиці -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Приклад: R=1, x ∈ [-2, 3], dx = 0.5</h3>
+        <table class="results-table">
+            <tr><th>x</th><th>y(x)</th><th>Формула</th></tr>
+            <tr><td>-2.0</td><td>0.000</td><td>x+R+1</td></tr>
+            <tr><td>-1.5</td><td>0.500</td><td>x+R+1</td></tr>
+            <tr><td>-1.0</td><td>1.000</td><td>x+R+1</td></tr>
+            <tr><td>-0.5</td><td>0.866</td><td>√(R²-x²)</td></tr>
+            <tr><td>0.0</td><td>1.000</td><td>√(R²-x²)</td></tr>
+            <tr><td>0.5</td><td>1.000</td><td>R</td></tr>
+            <tr><td>1.0</td><td>1.000</td><td>R</td></tr>
+            <tr><td>1.5</td><td>0.000</td><td>2R+1-(R+1)x</td></tr>
+            <tr><td>2.0</td><td>-1.000</td><td>2R+1-(R+1)x</td></tr>
+            <tr><td>2.5</td><td>-1.000</td><td>-1</td></tr>
+            <tr><td>3.0</td><td>-1.000</td><td>-1</td></tr>
+        </table>
+        <br>
+        <b style="color: green;">✅ Всі 4 методи дають однакові результати!</b>
+    </div>
+</body>
+</html>

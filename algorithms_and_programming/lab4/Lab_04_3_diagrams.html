@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 4.3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #000; padding: 40px 20px; }
+        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; }
+        .section-title { text-align: center; font-size: 1.8rem; margin: 50px 0 30px; border-bottom: 3px solid #000; padding-bottom: 10px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .formula-box { background: #f9f9f9; border: 2px solid #000; border-radius: 8px; padding: 25px; max-width: 900px; margin: 0 auto 50px; }
+        .formula-box h3 { margin-bottom: 15px; font-size: 1.3rem; }
+        .formula { font-family: 'Cambria Math', serif; font-size: 1.1rem; line-height: 2; padding-left: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1600px; margin: 0 auto; }
+        .diagram-section { background: #fff; border: 2px solid #000; border-radius: 8px; padding: 15px; flex: 1; min-width: 320px; max-width: 400px; }
+        .diagram-section h2 { text-align: center; font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+        svg { display: block; margin: 0 auto; }
+        .terminal, .process, .decision, .io { fill: #fff; stroke: #000; stroke-width: 2; }
+        .arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+        text { font-family: 'Segoe UI', sans-serif; fill: #000; font-size: 9px; text-anchor: middle; }
+        .label { font-size: 8px; font-weight: bold; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .results-table th, .results-table td { border: 1px solid #000; padding: 8px; text-align: center; font-size: 0.9rem; }
+        .results-table th { background: #f0f0f0; }
+        @media (max-width: 1200px) { .diagram-section { min-width: 100%; max-width: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №4.3</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            Обчислити і вивести таблицю значень F(x) на інтервалі [X<sub>поч</sub>, X<sub>кін</sub>] з кроком dX<br><br>
+            <table style="margin-left: 30px; margin-top: 10px;">
+                <tr><td>F = a·x² + b/c</td><td>, якщо x < 1 і c ≠ 0</td></tr>
+                <tr><td>F = (x-a)/(x-c)²</td><td>, якщо x > 1.5 і c = 0</td></tr>
+                <tr><td>F = x²/c²</td><td>, в інших випадках</td></tr>
+            </table>
+            <br>
+            де a, b, c – дійсні числа<br><br>
+            <b>4 способи (цикли):</b><br>
+            1. while (…) { … }<br>
+            2. do { … } while (…);<br>
+            3. for (…; …; x+=dx) { … }<br>
+            4. for (…; …; x-=dx) { … }
+        </div>
+    </div>
+    
+    <!-- БЛОК-СХЕМИ -->
+    <h2 class="section-title">Блок-схеми алгоритмів</h2>
+    
+    <div class="container">
+        <!-- F(x) -->
+        <div class="diagram-section">
+            <h2>F(x, a, b, c) - умовна функція</h2>
+            <svg width="360" height="420" viewBox="0 0 360 420">
+                <defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <ellipse class="terminal" cx="180" cy="22" rx="55" ry="14"/>
+                <text x="180" y="26">F(x, a, b, c)</text>
+                <path class="arrow" d="M180,36 L180,60"/>
+                <polygon class="decision" points="180,65 280,105 180,145 80,105"/>
+                <text x="180" y="100">x < 1 і</text>
+                <text x="180" y="115">c ≠ 0?</text>
+                <path class="arrow" d="M80,105 L40,105 L40,165"/>
+                <text class="label" x="62" y="97">Так</text>
+                <rect class="process" x="10" y="170" width="100" height="35" rx="3"/>
+                <text x="60" y="185" font-size="8">F = ax² + b/c</text>
+                <path class="arrow" d="M280,105 L320,105 L320,155"/>
+                <text class="label" x="295" y="97">Ні</text>
+                <polygon class="decision" points="320,160 360,195 320,230 280,195"/>
+                <text x="320" y="190">x > 1.5</text>
+                <text x="320" y="205">і c=0?</text>
+                <path class="arrow" d="M280,195 L230,195 L230,250"/>
+                <text class="label" x="252" y="187">Так</text>
+                <rect class="process" x="160" y="255" width="140" height="35" rx="3"/>
+                <text x="230" y="275" font-size="8">F = (x-a)/(x-c)²</text>
+                <path class="arrow" d="M320,230 L320,320"/>
+                <text class="label" x="330" y="245">Ні</text>
+                <rect class="process" x="260" y="325" width="100" height="35" rx="3"/>
+                <text x="310" y="347" font-size="8">F = x²/c²</text>
+                <path class="arrow" d="M60,205 L60,375 L180,375"/>
+                <path class="arrow" d="M230,290 L230,375 L180,375"/>
+                <path class="arrow" d="M310,360 L310,375 L190,375"/>
+                <path class="arrow" d="M180,375 L180,400"/>
+                <ellipse class="terminal" cx="180" cy="412" rx="40" ry="12"/>
+                <text x="180" y="416">return F</text>
+            </svg>
+        </div>
+        
+        <!-- while -->
+        <div class="diagram-section">
+            <h2>1. while - табулювання</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">tabulate(xStart,xEnd,dx)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="70" y="60" width="160" height="25" rx="3"/>
+                <text x="150" y="76">x = xStart</text>
+                <path class="arrow" d="M150,85 L150,110"/>
+                <polygon class="decision" points="150,115 230,155 150,195 70,155"/>
+                <text x="150" y="158">x ≤ xEnd?</text>
+                <path class="arrow" d="M230,155 L270,155 L270,310 L160,310"/>
+                <text class="label" x="245" y="147">Ні</text>
+                <path class="arrow" d="M150,195 L150,220"/>
+                <text class="label" x="165" y="205">Так</text>
+                <polygon class="io" points="70,225 230,225 220,255 80,255"/>
+                <text x="150" y="244">print x, F(x)</text>
+                <path class="arrow" d="M150,255 L150,275 L40,275 L40,155 L70,155"/>
+                <rect class="process" x="25" y="263" width="55" height="20" rx="2"/>
+                <text x="52" y="277" font-size="7">x += dx</text>
+                <path class="arrow" d="M150,310 L150,345"/>
+                <ellipse class="terminal" cx="150" cy="360" rx="35" ry="12"/>
+                <text x="150" y="364">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- do-while -->
+        <div class="diagram-section">
+            <h2>2. do-while - табулювання</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">tabulate(xStart,xEnd,dx)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="70" y="60" width="160" height="25" rx="3"/>
+                <text x="150" y="76">x = xStart</text>
+                <path class="arrow" d="M150,85 L150,110"/>
+                <polygon class="io" points="70,115 230,115 220,145 80,145"/>
+                <text x="150" y="134">print x, F(x)</text>
+                <path class="arrow" d="M150,145 L150,165"/>
+                <rect class="process" x="100" y="170" width="100" height="25" rx="3"/>
+                <text x="150" y="186">x += dx</text>
+                <path class="arrow" d="M150,195 L150,220"/>
+                <polygon class="decision" points="150,225 230,265 150,305 70,265"/>
+                <text x="150" y="268">x ≤ xEnd?</text>
+                <path class="arrow" d="M70,265 L40,265 L40,130 L70,130"/>
+                <text class="label" x="55" y="255">Так</text>
+                <path class="arrow" d="M230,265 L270,265 L270,340 L160,340"/>
+                <text class="label" x="245" y="255">Ні</text>
+                <ellipse class="terminal" cx="150" cy="360" rx="35" ry="12"/>
+                <text x="150" y="364">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- for x+=dx -->
+        <div class="diagram-section">
+            <h2>3. for (x+=dx) - табулювання</h2>
+            <svg width="300" height="350" viewBox="0 0 300 350">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">tabulate(xStart,xEnd,dx)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="70" y="60" width="160" height="25" rx="3"/>
+                <text x="150" y="76">x = xStart</text>
+                <path class="arrow" d="M150,85 L150,110"/>
+                <polygon class="decision" points="150,115 230,155 150,195 70,155"/>
+                <text x="150" y="158">x ≤ xEnd?</text>
+                <path class="arrow" d="M230,155 L270,155 L270,280 L160,280"/>
+                <text class="label" x="245" y="147">Ні</text>
+                <path class="arrow" d="M150,195 L150,215"/>
+                <text class="label" x="165" y="205">Так</text>
+                <polygon class="io" points="70,220 230,220 220,250 80,250"/>
+                <text x="150" y="239">print x, F(x)</text>
+                <path class="arrow" d="M150,250 L150,265 L40,265 L40,155 L70,155"/>
+                <rect class="process" x="25" y="253" width="55" height="20" rx="2"/>
+                <text x="52" y="267" font-size="7">x += dx</text>
+                <path class="arrow" d="M150,280 L150,315"/>
+                <ellipse class="terminal" cx="150" cy="330" rx="35" ry="12"/>
+                <text x="150" y="334">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- for x-=dx -->
+        <div class="diagram-section">
+            <h2>4. for (x-=dx) - табулювання</h2>
+            <svg width="300" height="350" viewBox="0 0 300 350">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">tabulate(xStart,xEnd,dx)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="70" y="60" width="160" height="25" rx="3"/>
+                <text x="150" y="76">x = xEnd</text>
+                <path class="arrow" d="M150,85 L150,110"/>
+                <polygon class="decision" points="150,115 230,155 150,195 70,155"/>
+                <text x="150" y="158">x ≥ xStart?</text>
+                <path class="arrow" d="M230,155 L270,155 L270,280 L160,280"/>
+                <text class="label" x="245" y="147">Ні</text>
+                <path class="arrow" d="M150,195 L150,215"/>
+                <text class="label" x="165" y="205">Так</text>
+                <polygon class="io" points="70,220 230,220 220,250 80,250"/>
+                <text x="150" y="239">print x, F(x)</text>
+                <path class="arrow" d="M150,250 L150,265 L40,265 L40,155 L70,155"/>
+                <rect class="process" x="25" y="253" width="55" height="20" rx="2"/>
+                <text x="52" y="267" font-size="7">x -= dx</text>
+                <path class="arrow" d="M150,280 L150,315"/>
+                <ellipse class="terminal" cx="150" cy="330" rx="35" ry="12"/>
+                <text x="150" y="334">Кінець</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- UML ACTIVITY ДІАГРАМИ -->
+    <h2 class="section-title">UML-діаграми дій</h2>
+    
+    <div class="container">
+        <!-- UML F(x) -->
+        <div class="diagram-section">
+            <h2>F(x) - UML Activity</h2>
+            <svg width="360" height="380" viewBox="0 0 360 380">
+                <defs><marker id="uml-arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <circle fill="#000" cx="180" cy="18" r="8"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M180,26 L180,50"/>
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="180,55 270,95 180,135 90,95"/>
+                <text x="180" y="90" font-size="8">[x<1 ∧ c≠0]</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M90,95 L50,95 L50,150"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="10" y="155" width="100" height="28" rx="10"/>
+                <text x="60" y="173" font-size="8">F := ax²+b/c</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M270,95 L310,95 L310,140"/>
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="310,145 350,180 310,215 270,180"/>
+                <text x="310" y="175" font-size="7">[x>1.5 ∧ c=0]</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M270,180 L220,180 L220,230"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="140" y="235" width="160" height="28" rx="10"/>
+                <text x="220" y="253" font-size="7">F := (x-a)/(x-c)²</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M310,215 L310,290"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="250" y="295" width="110" height="28" rx="10"/>
+                <text x="305" y="313" font-size="8">F := x²/c²</text>
+                <rect x="110" y="340" width="150" height="4" rx="2" fill="#000"/>
+                <path stroke="#000" stroke-width="2" fill="none" d="M60,183 L60,335"/>
+                <path stroke="#000" stroke-width="2" fill="none" d="M220,263 L220,335"/>
+                <path stroke="#000" stroke-width="2" fill="none" d="M305,323 L305,335"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M185,344 L185,365"/>
+                <circle fill="none" stroke="#000" stroke-width="2" cx="185" cy="373" r="8"/>
+                <circle fill="#000" cx="185" cy="373" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML while -->
+        <div class="diagram-section">
+            <h2>while - UML Activity</h2>
+            <svg width="280" height="320" viewBox="0 0 280 320">
+                <circle fill="#000" cx="140" cy="18" r="8"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,26 L140,45"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="60" y="50" width="160" height="28" rx="10"/>
+                <text x="140" y="68">x := xStart</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,78 L140,100"/>
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="140,105 210,140 140,175 70,140"/>
+                <text x="140" y="143" font-size="8">[x ≤ xEnd]</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,175 L140,200"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="50" y="205" width="180" height="28" rx="10"/>
+                <text x="140" y="223" font-size="8">print(x, F(x)); x += dx</text>
+                <path stroke="#000" stroke-width="2" fill="none" d="M140,233 L140,250 L30,250 L30,140 L70,140"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M210,140 L250,140 L250,280 L150,280"/>
+                <text x="225" y="132" font-size="7">[else]</text>
+                <circle fill="none" stroke="#000" stroke-width="2" cx="140" cy="295" r="8"/>
+                <circle fill="#000" cx="140" cy="295" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML do-while -->
+        <div class="diagram-section">
+            <h2>do-while - UML Activity</h2>
+            <svg width="280" height="340" viewBox="0 0 280 340">
+                <circle fill="#000" cx="140" cy="18" r="8"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,26 L140,45"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="60" y="50" width="160" height="28" rx="10"/>
+                <text x="140" y="68">x := xStart</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,78 L140,100"/>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="30" y="105" width="220" height="28" rx="10"/>
+                <text x="140" y="123" font-size="8">print(x, F(x)); x += dx</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,133 L140,160"/>
+                <polygon fill="#fff" stroke="#000" stroke-width="2" points="140,165 210,200 140,235 70,200"/>
+                <text x="140" y="203" font-size="8">[x ≤ xEnd]</text>
+                <path stroke="#000" stroke-width="2" fill="none" d="M70,200 L25,200 L25,118 L30,118"/>
+                <text x="50" y="190" font-size="7">[true]</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M210,200 L250,200 L250,280 L150,280"/>
+                <text x="225" y="190" font-size="7">[false]</text>
+                <circle fill="none" stroke="#000" stroke-width="2" cx="140" cy="300" r="8"/>
+                <circle fill="#000" cx="140" cy="300" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML for x+=dx -->
+        <div class="diagram-section">
+            <h2>for x+=dx - UML Activity (loop)</h2>
+            <svg width="280" height="280" viewBox="0 0 280 280">
+                <circle fill="#000" cx="140" cy="18" r="8"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,26 L140,50"/>
+                <rect fill="none" stroke="#000" stroke-width="1" stroke-dasharray="4,2" x="30" y="55" width="220" height="130" rx="5"/>
+                <text x="55" y="72" font-size="8" font-weight="bold">«loop» [x = xStart..xEnd, step +dx]</text>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="50" y="90" width="180" height="28" rx="10"/>
+                <text x="140" y="108" font-size="8">print(x, F(x))</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,185 L140,220"/>
+                <circle fill="none" stroke="#000" stroke-width="2" cx="140" cy="240" r="8"/>
+                <circle fill="#000" cx="140" cy="240" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML for x-=dx -->
+        <div class="diagram-section">
+            <h2>for x-=dx - UML Activity (loop)</h2>
+            <svg width="280" height="280" viewBox="0 0 280 280">
+                <circle fill="#000" cx="140" cy="18" r="8"/>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,26 L140,50"/>
+                <rect fill="none" stroke="#000" stroke-width="1" stroke-dasharray="4,2" x="30" y="55" width="220" height="130" rx="5"/>
+                <text x="55" y="72" font-size="8" font-weight="bold">«loop» [x = xEnd..xStart, step -dx]</text>
+                <rect fill="#fff" stroke="#000" stroke-width="2" x="50" y="90" width="180" height="28" rx="10"/>
+                <text x="140" y="108" font-size="8">print(x, F(x))</text>
+                <path stroke="#000" stroke-width="2" fill="none" marker-end="url(#uml-arrowhead)" d="M140,185 L140,220"/>
+                <circle fill="none" stroke="#000" stroke-width="2" cx="140" cy="240" r="8"/>
+                <circle fill="#000" cx="140" cy="240" r="4"/>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Порівняння циклів -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Порівняння циклів:</h3>
+        <table class="results-table">
+            <tr>
+                <th>Цикл</th>
+                <th>Ініціалізація</th>
+                <th>Перевірка умови</th>
+                <th>Тіло циклу</th>
+                <th>Зміна лічильника</th>
+            </tr>
+            <tr>
+                <td><b>while</b></td>
+                <td>До циклу</td>
+                <td>На початку</td>
+                <td>Після перевірки</td>
+                <td>В кінці тіла</td>
+            </tr>
+            <tr>
+                <td><b>do-while</b></td>
+                <td>До циклу</td>
+                <td>В кінці</td>
+                <td>Перед перевіркою</td>
+                <td>В кінці тіла</td>
+            </tr>
+            <tr>
+                <td><b>for (x+=dx)</b></td>
+                <td>В заголовку</td>
+                <td>На початку</td>
+                <td>Після перевірки</td>
+                <td>В заголовку (++)</td>
+            </tr>
+            <tr>
+                <td><b>for (x-=dx)</b></td>
+                <td>В заголовку</td>
+                <td>На початку</td>
+                <td>Після перевірки</td>
+                <td>В заголовку (--)</td>
+            </tr>
+        </table>
+    </div>
+    
+    <!-- Приклад таблиці -->
+    <div class="formula-box" style="margin-top: 30px;">
+        <h3>Приклад: a=2, b=4, c=2, x ∈ [-1, 3], dx = 0.5</h3>
+        <table class="results-table">
+            <tr><th>x</th><th>F(x)</th><th>Область</th></tr>
+            <tr><td>-1.0</td><td>4.00</td><td>x<1, c≠0: ax²+b/c</td></tr>
+            <tr><td>-0.5</td><td>2.50</td><td>x<1, c≠0: ax²+b/c</td></tr>
+            <tr><td>0.0</td><td>2.00</td><td>x<1, c≠0: ax²+b/c</td></tr>
+            <tr><td>0.5</td><td>2.50</td><td>x<1, c≠0: ax²+b/c</td></tr>
+            <tr><td>1.0</td><td>0.25</td><td>інше: x²/c²</td></tr>
+            <tr><td>1.5</td><td>0.5625</td><td>інше: x²/c²</td></tr>
+            <tr><td>2.0</td><td>1.00</td><td>інше: x²/c²</td></tr>
+            <tr><td>2.5</td><td>1.5625</td><td>інше: x²/c²</td></tr>
+            <tr><td>3.0</td><td>2.25</td><td>інше: x²/c²</td></tr>
+        </table>
+        <br>
+        <b style="color: green;">✅ Всі 4 методи дають однакові результати!</b>
+    </div>
+</body>
+</html>
