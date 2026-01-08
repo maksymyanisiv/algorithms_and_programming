@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 5.1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            min-height: 100vh;
+            color: #000;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 50px 0 30px;
+            color: #000;
+            border-bottom: 3px solid #000;
+            padding-bottom: 10px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .formula-box {
+            background: #f9f9f9;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 25px;
+            max-width: 750px;
+            margin: 0 auto 50px;
+        }
+        
+        .formula-box h3 {
+            color: #000;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .formula {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.1rem;
+            line-height: 2;
+            padding-left: 20px;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        .diagram-section {
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 25px;
+            flex: 1;
+            min-width: 350px;
+            max-width: 450px;
+        }
+        
+        .diagram-section.wide {
+            min-width: 500px;
+            max-width: 600px;
+        }
+        
+        .diagram-section h2 {
+            text-align: center;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        
+        svg {
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .terminal {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .process {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .subroutine {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .io {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .arrow {
+            stroke: #000;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+        
+        .uml-initial {
+            fill: #000;
+        }
+        
+        .uml-final-outer {
+            fill: none;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .uml-final-inner {
+            fill: #000;
+        }
+        
+        .uml-action {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .uml-call {
+            fill: #f0f0f0;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .uml-arrow {
+            stroke: #000;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#uml-arrowhead);
+        }
+        
+        text {
+            font-family: 'Segoe UI', sans-serif;
+            fill: #000;
+            font-size: 11px;
+            text-anchor: middle;
+        }
+        
+        .label {
+            font-size: 10px;
+            font-weight: bold;
+            fill: #000;
+        }
+        
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border: 1px solid #000;
+            border-radius: 8px;
+        }
+        
+        .legend h4 {
+            color: #000;
+            margin-bottom: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+        
+        .legend-shape {
+            width: 30px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 1200px) {
+            .diagram-section {
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+        
+        @media print {
+            body {
+                padding: 10px;
+            }
+            .diagram-section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №5.1</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            Обчислити: 
+            <br><br>
+            result = (p²·(1+2s+s²) - p³·(1+3s+s³)) / (1 + √(p(s) + p⁴(s)))
+            <br><br>
+            де p(x) = 1 + x²/2 - x⁴/4
+        </div>
+    </div>
+    
+    <!-- ==================== БЛОК-СХЕМИ ==================== -->
+    <h2 class="section-title">Блок-схеми</h2>
+    
+    <div class="container">
+        <!-- Блок-схема головної програми -->
+        <div class="diagram-section">
+            <h2>Головна програма</h2>
+            
+            <svg width="350" height="520" viewBox="0 0 350 520">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+                    </marker>
+                </defs>
+                
+                <!-- Початок -->
+                <ellipse class="terminal" cx="175" cy="35" rx="55" ry="22"/>
+                <text x="175" y="40">Початок</text>
+                
+                <path class="arrow" d="M175,57 L175,85"/>
+                
+                <!-- Введення s -->
+                <polygon class="io" points="105,90 245,90 225,125 125,125"/>
+                <text x="175" y="112">Введення s</text>
+                
+                <path class="arrow" d="M175,125 L175,160"/>
+                
+                <!-- Виклик функції p(s) -->
+                <rect class="subroutine" x="75" y="165" width="200" height="40" rx="5"/>
+                <line x1="90" y1="165" x2="90" y2="205" stroke="#000" stroke-width="2"/>
+                <line x1="260" y1="165" x2="260" y2="205" stroke="#000" stroke-width="2"/>
+                <text x="175" y="190">ps = p(s)</text>
+                
+                <path class="arrow" d="M175,205 L175,240"/>
+                
+                <!-- Виклик calculate -->
+                <rect class="subroutine" x="65" y="245" width="220" height="40" rx="5"/>
+                <line x1="80" y1="245" x2="80" y2="285" stroke="#000" stroke-width="2"/>
+                <line x1="270" y1="245" x2="270" y2="285" stroke="#000" stroke-width="2"/>
+                <text x="175" y="270">result = calculate(s)</text>
+                
+                <path class="arrow" d="M175,285 L175,320"/>
+                
+                <!-- Виведення результату -->
+                <polygon class="io" points="90,325 260,325 240,360 110,360"/>
+                <text x="175" y="347">Виведення result</text>
+                
+                <path class="arrow" d="M175,360 L175,400"/>
+                
+                <!-- Кінець -->
+                <ellipse class="terminal" cx="175" cy="425" rx="55" ry="22"/>
+                <text x="175" y="430">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Блок-схема функції p(x) -->
+        <div class="diagram-section">
+            <h2>Функція p(x)</h2>
+            
+            <svg width="350" height="420" viewBox="0 0 350 420">
+                <!-- Початок функції -->
+                <ellipse class="terminal" cx="175" cy="35" rx="55" ry="22"/>
+                <text x="175" y="40">p(x)</text>
+                
+                <path class="arrow" d="M175,57 L175,90"/>
+                
+                <!-- Обчислення x^2 -->
+                <rect class="process" x="75" y="95" width="200" height="40" rx="5"/>
+                <text x="175" y="120">x2 = x * x</text>
+                
+                <path class="arrow" d="M175,135 L175,170"/>
+                
+                <!-- Обчислення x^4 -->
+                <rect class="process" x="75" y="175" width="200" height="40" rx="5"/>
+                <text x="175" y="200">x4 = x2 * x2</text>
+                
+                <path class="arrow" d="M175,215 L175,250"/>
+                
+                <!-- Обчислення результату -->
+                <rect class="process" x="55" y="255" width="240" height="40" rx="5"/>
+                <text x="175" y="280">result = 1 + x2/2 - x4/4</text>
+                
+                <path class="arrow" d="M175,295 L175,330"/>
+                
+                <!-- Повернення результату -->
+                <ellipse class="terminal" cx="175" cy="355" rx="65" ry="22"/>
+                <text x="175" y="360">return result</text>
+            </svg>
+        </div>
+        
+        <!-- Блок-схема функції calculate -->
+        <div class="diagram-section wide">
+            <h2>Функція calculate(s)</h2>
+            
+            <svg width="400" height="580" viewBox="0 0 400 580">
+                <!-- Початок функції -->
+                <ellipse class="terminal" cx="200" cy="30" rx="70" ry="22"/>
+                <text x="200" y="35">calculate(s)</text>
+                
+                <path class="arrow" d="M200,52 L200,80"/>
+                
+                <!-- Виклик p(s) -->
+                <rect class="subroutine" x="100" y="85" width="200" height="38" rx="5"/>
+                <line x1="115" y1="85" x2="115" y2="123" stroke="#000" stroke-width="2"/>
+                <line x1="285" y1="85" x2="285" y2="123" stroke="#000" stroke-width="2"/>
+                <text x="200" y="109">ps = p(s)</text>
+                
+                <path class="arrow" d="M200,123 L200,155"/>
+                
+                <!-- Обчислення степенів -->
+                <rect class="process" x="70" y="160" width="260" height="50" rx="5"/>
+                <text x="200" y="180">ps2 = ps², ps3 = ps³</text>
+                <text x="200" y="198">ps4 = ps⁴</text>
+                
+                <path class="arrow" d="M200,210 L200,245"/>
+                
+                <!-- Обчислення чисельника -->
+                <rect class="process" x="40" y="250" width="320" height="50" rx="5"/>
+                <text x="200" y="270" font-size="10">num = ps2·(1+2s+s²)</text>
+                <text x="200" y="288" font-size="10">      - ps3·(1+3s+s³)</text>
+                
+                <path class="arrow" d="M200,300 L200,335"/>
+                
+                <!-- Обчислення знаменника -->
+                <rect class="process" x="60" y="340" width="280" height="40" rx="5"/>
+                <text x="200" y="365">den = 1 + √(ps + ps4)</text>
+                
+                <path class="arrow" d="M200,380 L200,415"/>
+                
+                <!-- Обчислення результату -->
+                <rect class="process" x="90" y="420" width="220" height="40" rx="5"/>
+                <text x="200" y="445">result = num / den</text>
+                
+                <path class="arrow" d="M200,460 L200,495"/>
+                
+                <!-- Повернення результату -->
+                <ellipse class="terminal" cx="200" cy="520" rx="65" ry="22"/>
+                <text x="200" y="525">return result</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- ==================== UML ACTIVITY ДІАГРАМИ ==================== -->
+    <h2 class="section-title">UML Activity діаграми</h2>
+    
+    <div class="container">
+        <!-- UML Activity головної програми -->
+        <div class="diagram-section">
+            <h2>Головна програма (UML)</h2>
+            
+            <svg width="350" height="550" viewBox="0 0 350 550">
+                <defs>
+                    <marker id="uml-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+                    </marker>
+                </defs>
+                
+                <!-- Initial node -->
+                <circle class="uml-initial" cx="175" cy="25" r="10"/>
+                
+                <path class="uml-arrow" d="M175,35 L175,65"/>
+                
+                <!-- Action: Введення s -->
+                <rect class="uml-action" x="75" y="70" width="200" height="40" rx="15"/>
+                <text x="175" y="95">Введення значення s</text>
+                
+                <path class="uml-arrow" d="M175,110 L175,145"/>
+                
+                <!-- Call action: p(s) -->
+                <rect class="uml-call" x="75" y="150" width="200" height="40" rx="15"/>
+                <text x="175" y="170" font-size="10">«call»</text>
+                <text x="175" y="183" font-weight="bold">ps = p(s)</text>
+                
+                <path class="uml-arrow" d="M175,190 L175,225"/>
+                
+                <!-- Call action: calculate(s) -->
+                <rect class="uml-call" x="60" y="230" width="230" height="40" rx="15"/>
+                <text x="175" y="250" font-size="10">«call»</text>
+                <text x="175" y="263" font-weight="bold">result = calculate(s)</text>
+                
+                <path class="uml-arrow" d="M175,270 L175,305"/>
+                
+                <!-- Action: Виведення -->
+                <rect class="uml-action" x="60" y="310" width="230" height="40" rx="15"/>
+                <text x="175" y="335">Виведення ps, result</text>
+                
+                <path class="uml-arrow" d="M175,350 L175,390"/>
+                
+                <!-- Final node -->
+                <circle class="uml-final-outer" cx="175" cy="415" r="12"/>
+                <circle class="uml-final-inner" cx="175" cy="415" r="6"/>
+            </svg>
+        </div>
+        
+        <!-- UML Activity функції p(x) -->
+        <div class="diagram-section">
+            <h2>Функція p(x) (UML)</h2>
+            
+            <svg width="350" height="480" viewBox="0 0 350 480">
+                <!-- Initial node with parameter -->
+                <circle class="uml-initial" cx="175" cy="25" r="10"/>
+                <text x="175" y="50" font-size="10">[параметр: x]</text>
+                
+                <path class="uml-arrow" d="M175,55 L175,85"/>
+                
+                <!-- Action: x^2 -->
+                <rect class="uml-action" x="75" y="90" width="200" height="40" rx="15"/>
+                <text x="175" y="115">x2 := x × x</text>
+                
+                <path class="uml-arrow" d="M175,130 L175,165"/>
+                
+                <!-- Action: x^4 -->
+                <rect class="uml-action" x="75" y="170" width="200" height="40" rx="15"/>
+                <text x="175" y="195">x4 := x2 × x2</text>
+                
+                <path class="uml-arrow" d="M175,210 L175,245"/>
+                
+                <!-- Action: result -->
+                <rect class="uml-action" x="55" y="250" width="240" height="40" rx="15"/>
+                <text x="175" y="275">result := 1 + x2/2 - x4/4</text>
+                
+                <path class="uml-arrow" d="M175,290 L175,330"/>
+                
+                <!-- Activity Final with return -->
+                <rect class="uml-action" x="95" y="335" width="160" height="35" rx="15" style="stroke-dasharray: 5,3;"/>
+                <text x="175" y="357">return result</text>
+                
+                <path class="uml-arrow" d="M175,370 L175,405"/>
+                
+                <!-- Final node -->
+                <circle class="uml-final-outer" cx="175" cy="425" r="12"/>
+                <circle class="uml-final-inner" cx="175" cy="425" r="6"/>
+            </svg>
+        </div>
+        
+        <!-- UML Activity функції calculate(s) -->
+        <div class="diagram-section wide">
+            <h2>Функція calculate(s) (UML)</h2>
+            
+            <svg width="450" height="650" viewBox="0 0 450 650">
+                <!-- Initial node with parameter -->
+                <circle class="uml-initial" cx="225" cy="25" r="10"/>
+                <text x="225" y="50" font-size="10">[параметр: s]</text>
+                
+                <path class="uml-arrow" d="M225,55 L225,85"/>
+                
+                <!-- Call action: p(s) -->
+                <rect class="uml-call" x="125" y="90" width="200" height="40" rx="15"/>
+                <text x="225" y="110" font-size="10">«call»</text>
+                <text x="225" y="123" font-weight="bold">ps := p(s)</text>
+                
+                <path class="uml-arrow" d="M225,130 L225,165"/>
+                
+                <!-- Action: степені -->
+                <rect class="uml-action" x="100" y="170" width="250" height="55" rx="15"/>
+                <text x="225" y="192">ps2 := ps × ps</text>
+                <text x="225" y="210">ps3 := ps2 × ps, ps4 := ps3 × ps</text>
+                
+                <path class="uml-arrow" d="M225,225 L225,260"/>
+                
+                <!-- Action: s^2, s^3 -->
+                <rect class="uml-action" x="100" y="265" width="250" height="40" rx="15"/>
+                <text x="225" y="290">s2 := s², s3 := s³</text>
+                
+                <path class="uml-arrow" d="M225,305 L225,340"/>
+                
+                <!-- Action: чисельник -->
+                <rect class="uml-action" x="60" y="345" width="330" height="55" rx="15"/>
+                <text x="225" y="367" font-size="10">num := ps2 × (1 + 2s + s2)</text>
+                <text x="225" y="387" font-size="10">       - ps3 × (1 + 3s + s3)</text>
+                
+                <path class="uml-arrow" d="M225,400 L225,435"/>
+                
+                <!-- Action: знаменник -->
+                <rect class="uml-action" x="80" y="440" width="290" height="40" rx="15"/>
+                <text x="225" y="465">den := 1 + √(ps + ps4)</text>
+                
+                <path class="uml-arrow" d="M225,480 L225,515"/>
+                
+                <!-- Action: результат -->
+                <rect class="uml-action" x="115" y="520" width="220" height="40" rx="15"/>
+                <text x="225" y="545">result := num / den</text>
+                
+                <path class="uml-arrow" d="M225,560 L225,590"/>
+                
+                <!-- Final node -->
+                <circle class="uml-final-outer" cx="225" cy="610" r="12"/>
+                <circle class="uml-final-inner" cx="225" cy="610" r="6"/>
+                <text x="225" y="640" font-size="10">[return result]</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Легенда -->
+    <div class="container" style="margin-top: 40px;">
+        <div class="diagram-section">
+            <h2>Умовні позначення (Блок-схема)</h2>
+            <div class="legend" style="margin-top: 0;">
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000; border-radius: 50%;"></div>
+                    <span>Термінатор (початок/кінець)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000; transform: skewX(-10deg);"></div>
+                    <span>Введення/виведення даних</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000;"></div>
+                    <span>Процес (обчислення)</span>
+                </div>
+                <div class="legend-item">
+                    <div style="width: 50px; height: 20px; background: #fff; border: 2px solid #000; position: relative;">
+                        <div style="position: absolute; left: 3px; top: 0; bottom: 0; width: 2px; background: #000;"></div>
+                        <div style="position: absolute; right: 3px; top: 0; bottom: 0; width: 2px; background: #000;"></div>
+                    </div>
+                    <span>Підпрограма (виклик функції)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="diagram-section">
+            <h2>Умовні позначення (UML Activity)</h2>
+            <div class="legend" style="margin-top: 0;">
+                <div class="legend-item">
+                    <div style="width: 16px; height: 16px; background: #000; border-radius: 50%;"></div>
+                    <span>Initial Node (початок)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000; border-radius: 12px;"></div>
+                    <span>Action (дія)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #f0f0f0; border: 2px solid #000; border-radius: 12px;"></div>
+                    <span>Call Action (виклик функції)</span>
+                </div>
+                <div class="legend-item">
+                    <div style="width: 20px; height: 20px; border: 2px solid #000; border-radius: 50%; position: relative;">
+                        <div style="position: absolute; top: 5px; left: 5px; width: 8px; height: 8px; background: #000; border-radius: 50%;"></div>
+                    </div>
+                    <span>Activity Final Node (кінець)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Unit Tests -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Unit Tests:</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.95rem;">
+            <b>test_p_function():</b><br>
+            • p(0) = 1.0 ✓<br>
+            • p(1) = 1.25 ✓<br>
+            • p(-1) = 1.25 ✓<br>
+            • p(2) = -1.0 ✓<br>
+            • p(0.5) = 1.109375 ✓<br><br>
+            <b>test_calculate_function():</b><br>
+            • calculate(0) = 0.0 ✓<br>
+            • calculate(1) ≈ -1.203 ✓<br>
+            • calculate(0.5) ≈ -0.311 ✓
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 5.2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            color: #000;
+            padding: 40px 20px;
+        }
+        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; }
+        .section-title {
+            text-align: center; font-size: 1.8rem; margin: 50px 0 30px;
+            border-bottom: 3px solid #000; padding-bottom: 10px;
+            max-width: 400px; margin-left: auto; margin-right: auto;
+        }
+        .formula-box {
+            background: #f9f9f9; border: 2px solid #000; border-radius: 8px;
+            padding: 25px; max-width: 800px; margin: 0 auto 50px;
+        }
+        .formula-box h3 { margin-bottom: 15px; font-size: 1.3rem; }
+        .formula { font-family: 'Cambria Math', serif; font-size: 1.1rem; line-height: 2; padding-left: 20px; }
+        .container {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 30px; max-width: 1800px; margin: 0 auto;
+        }
+        .diagram-section {
+            background: #fff; border: 2px solid #000; border-radius: 8px;
+            padding: 25px; flex: 1; min-width: 380px; max-width: 500px;
+        }
+        .diagram-section.wide { min-width: 550px; max-width: 650px; }
+        .diagram-section h2 {
+            text-align: center; font-size: 1.3rem; margin-bottom: 20px;
+            border-bottom: 2px solid #000; padding-bottom: 10px;
+        }
+        svg { display: block; margin: 0 auto; }
+        .terminal, .process, .decision, .io, .subroutine {
+            fill: #fff; stroke: #000; stroke-width: 2;
+        }
+        .arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+        .uml-initial { fill: #000; }
+        .uml-final-outer { fill: none; stroke: #000; stroke-width: 2; }
+        .uml-final-inner { fill: #000; }
+        .uml-action, .uml-call, .uml-decision { fill: #fff; stroke: #000; stroke-width: 2; }
+        .uml-call { fill: #f0f0f0; }
+        .uml-arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#uml-arrowhead); }
+        text { font-family: 'Segoe UI', sans-serif; fill: #000; font-size: 10px; text-anchor: middle; }
+        .label { font-size: 9px; font-weight: bold; }
+        .legend {
+            margin-top: 30px; padding: 20px; background: #f5f5f5;
+            border: 1px solid #000; border-radius: 8px;
+        }
+        .legend h4 { margin-bottom: 15px; }
+        .legend-item { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: 0.9rem; }
+        @media (max-width: 1200px) { .diagram-section { min-width: 100%; max-width: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №5.2</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            Arcth(x) = Σ 1/((2n+1)·x^(2n+1)) = 1/x + 1/(3x³) + 1/(5x⁵) + ..., |x| > 1<br><br>
+            <b>Рекурентне співвідношення:</b><br>
+            a₀ = 1/x<br>
+            aₙ = aₙ₋₁ · (2n-1) / ((2n+1) · x²)
+        </div>
+    </div>
+    
+    <!-- БЛОК-СХЕМИ -->
+    <h2 class="section-title">Блок-схеми</h2>
+    
+    <div class="container">
+        <!-- Головна програма -->
+        <div class="diagram-section">
+            <h2>Головна програма</h2>
+            <svg width="380" height="600" viewBox="0 0 380 600">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+                    </marker>
+                </defs>
+                
+                <ellipse class="terminal" cx="190" cy="30" rx="55" ry="20"/>
+                <text x="190" y="35">Початок</text>
+                
+                <path class="arrow" d="M190,50 L190,75"/>
+                
+                <polygon class="io" points="100,80 280,80 260,115 120,115"/>
+                <text x="190" y="102">Введення xmin, xmax, dx, eps</text>
+                
+                <path class="arrow" d="M190,115 L190,145"/>
+                
+                <rect class="process" x="100" y="150" width="180" height="35" rx="5"/>
+                <text x="190" y="172">x = xmin</text>
+                
+                <path class="arrow" d="M190,185 L190,215"/>
+                
+                <polygon class="decision" points="190,220 280,260 190,300 100,260"/>
+                <text x="190" y="265">x ≤ xmax?</text>
+                
+                <path class="arrow" d="M280,260 L330,260 L330,500 L190,500"/>
+                <text class="label" x="300" y="250">Ні</text>
+                
+                <path class="arrow" d="M190,300 L190,330"/>
+                <text class="label" x="205" y="315">Так</text>
+                
+                <rect class="subroutine" x="70" y="335" width="240" height="35" rx="5"/>
+                <line x1="85" y1="335" x2="85" y2="370" stroke="#000" stroke-width="2"/>
+                <line x1="295" y1="335" x2="295" y2="370" stroke="#000" stroke-width="2"/>
+                <text x="190" y="357">taylor = taylorSum(x, eps, count)</text>
+                
+                <path class="arrow" d="M190,370 L190,400"/>
+                
+                <rect class="subroutine" x="90" y="405" width="200" height="35" rx="5"/>
+                <line x1="105" y1="405" x2="105" y2="440" stroke="#000" stroke-width="2"/>
+                <line x1="275" y1="405" x2="275" y2="440" stroke="#000" stroke-width="2"/>
+                <text x="190" y="427">exact = arcthExact(x)</text>
+                
+                <path class="arrow" d="M190,440 L190,465"/>
+                
+                <polygon class="io" points="100,470 280,470 260,505 120,505"/>
+                <text x="190" y="492">Виведення рядка таблиці</text>
+                
+                <path class="arrow" d="M190,505 L190,525 L50,525 L50,260 L100,260"/>
+                
+                <rect class="process" x="55" y="510" width="85" height="30" rx="5"/>
+                <text x="97" y="530" font-size="9">x = x + dx</text>
+                
+                <path class="arrow" d="M190,500 L190,540"/>
+                
+                <ellipse class="terminal" cx="190" cy="565" rx="55" ry="20"/>
+                <text x="190" y="570">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Функція taylorSum -->
+        <div class="diagram-section wide">
+            <h2>Функція taylorSum(x, eps, count)</h2>
+            <svg width="450" height="650" viewBox="0 0 450 650">
+                <ellipse class="terminal" cx="225" cy="30" rx="90" ry="20"/>
+                <text x="225" y="35">taylorSum(x, eps, count)</text>
+                
+                <path class="arrow" d="M225,50 L225,80"/>
+                
+                <rect class="process" x="115" y="85" width="220" height="35" rx="5"/>
+                <text x="225" y="107">term = 1/x, sum = term, count = 1</text>
+                
+                <path class="arrow" d="M225,120 L225,155"/>
+                
+                <polygon class="decision" points="225,160 330,210 225,260 120,210"/>
+                <text x="225" y="205">|term| ≥ eps?</text>
+                
+                <path class="arrow" d="M120,210 L60,210 L60,440 L225,440"/>
+                <text class="label" x="90" y="200">Ні</text>
+                
+                <path class="arrow" d="M225,260 L225,295"/>
+                <text class="label" x="245" y="280">Так</text>
+                
+                <rect class="subroutine" x="95" y="300" width="260" height="35" rx="5"/>
+                <line x1="110" y1="300" x2="110" y2="335" stroke="#000" stroke-width="2"/>
+                <line x1="340" y1="300" x2="340" y2="335" stroke="#000" stroke-width="2"/>
+                <text x="225" y="322">term = nextTerm(term, count, x)</text>
+                
+                <path class="arrow" d="M225,335 L225,365"/>
+                
+                <rect class="process" x="115" y="370" width="220" height="35" rx="5"/>
+                <text x="225" y="392">sum = sum + term</text>
+                
+                <path class="arrow" d="M225,405 L225,430 L380,430 L380,210 L330,210"/>
+                
+                <rect class="process" x="350" y="400" width="80" height="30" rx="5"/>
+                <text x="390" y="420" font-size="9">count++</text>
+                
+                <path class="arrow" d="M225,440 L225,475"/>
+                
+                <ellipse class="terminal" cx="225" cy="500" rx="65" ry="20"/>
+                <text x="225" y="505">return sum</text>
+            </svg>
+        </div>
+        
+        <!-- Функція nextTerm -->
+        <div class="diagram-section">
+            <h2>Функція nextTerm(prev, n, x)</h2>
+            <svg width="380" height="350" viewBox="0 0 380 350">
+                <ellipse class="terminal" cx="190" cy="30" rx="90" ry="20"/>
+                <text x="190" y="35">nextTerm(prev, n, x)</text>
+                
+                <path class="arrow" d="M190,50 L190,85"/>
+                
+                <rect class="process" x="100" y="90" width="180" height="35" rx="5"/>
+                <text x="190" y="112">x2 = x * x</text>
+                
+                <path class="arrow" d="M190,125 L190,160"/>
+                
+                <rect class="process" x="55" y="165" width="270" height="40" rx="5"/>
+                <text x="190" y="183" font-size="9">result = prev * (2n-1) / ((2n+1) * x2)</text>
+                
+                <path class="arrow" d="M190,205 L190,245"/>
+                
+                <ellipse class="terminal" cx="190" cy="270" rx="65" ry="20"/>
+                <text x="190" y="275">return result</text>
+            </svg>
+        </div>
+        
+        <!-- Функція arcthExact -->
+        <div class="diagram-section">
+            <h2>Функція arcthExact(x)</h2>
+            <svg width="380" height="300" viewBox="0 0 380 300">
+                <ellipse class="terminal" cx="190" cy="30" rx="70" ry="20"/>
+                <text x="190" y="35">arcthExact(x)</text>
+                
+                <path class="arrow" d="M190,50 L190,90"/>
+                
+                <rect class="process" x="55" y="95" width="270" height="40" rx="5"/>
+                <text x="190" y="120">result = 0.5 * ln((x+1)/(x-1))</text>
+                
+                <path class="arrow" d="M190,135 L190,180"/>
+                
+                <ellipse class="terminal" cx="190" cy="205" rx="65" ry="20"/>
+                <text x="190" y="210">return result</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- UML ACTIVITY ДІАГРАМИ -->
+    <h2 class="section-title">UML Activity діаграми</h2>
+    
+    <div class="container">
+        <!-- UML головна програма -->
+        <div class="diagram-section wide">
+            <h2>Головна програма (UML)</h2>
+            <svg width="500" height="600" viewBox="0 0 500 600">
+                <defs>
+                    <marker id="uml-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+                    </marker>
+                </defs>
+                
+                <circle class="uml-initial" cx="250" cy="25" r="10"/>
+                
+                <path class="uml-arrow" d="M250,35 L250,60"/>
+                
+                <rect class="uml-action" x="120" y="65" width="260" height="35" rx="15"/>
+                <text x="250" y="87">Введення xmin, xmax, dx, eps</text>
+                
+                <path class="uml-arrow" d="M250,100 L250,130"/>
+                
+                <rect class="uml-action" x="170" y="135" width="160" height="30" rx="15"/>
+                <text x="250" y="155">x := xmin</text>
+                
+                <path class="uml-arrow" d="M250,165 L250,195"/>
+                
+                <!-- Loop -->
+                <rect x="80" y="200" width="340" height="280" rx="10" fill="none" stroke="#000" stroke-width="1" stroke-dasharray="5,3"/>
+                <text x="100" y="220" font-size="9" font-weight="bold">«loop» [x ≤ xmax]</text>
+                
+                <rect class="uml-call" x="120" y="235" width="260" height="35" rx="15"/>
+                <text x="250" y="250" font-size="9">«call»</text>
+                <text x="250" y="263">taylor := taylorSum(x, eps, count)</text>
+                
+                <path class="uml-arrow" d="M250,270 L250,300"/>
+                
+                <rect class="uml-call" x="140" y="305" width="220" height="35" rx="15"/>
+                <text x="250" y="320" font-size="9">«call»</text>
+                <text x="250" y="333">exact := arcthExact(x)</text>
+                
+                <path class="uml-arrow" d="M250,340 L250,370"/>
+                
+                <rect class="uml-action" x="120" y="375" width="260" height="35" rx="15"/>
+                <text x="250" y="397">Виведення x, exact, taylor, count</text>
+                
+                <path class="uml-arrow" d="M250,410 L250,440"/>
+                
+                <rect class="uml-action" x="170" y="445" width="160" height="30" rx="15"/>
+                <text x="250" y="465">x := x + dx</text>
+                
+                <path class="uml-arrow" d="M250,480 L250,520"/>
+                
+                <circle class="uml-final-outer" cx="250" cy="545" r="12"/>
+                <circle class="uml-final-inner" cx="250" cy="545" r="6"/>
+            </svg>
+        </div>
+        
+        <!-- UML taylorSum -->
+        <div class="diagram-section wide">
+            <h2>Функція taylorSum (UML)</h2>
+            <svg width="500" height="550" viewBox="0 0 500 550">
+                <circle class="uml-initial" cx="250" cy="25" r="10"/>
+                <text x="250" y="50" font-size="9">[параметри: x, eps, count]</text>
+                
+                <path class="uml-arrow" d="M250,55 L250,85"/>
+                
+                <rect class="uml-action" x="100" y="90" width="300" height="35" rx="15"/>
+                <text x="250" y="112">term := 1/x, sum := term, count := 1</text>
+                
+                <path class="uml-arrow" d="M250,125 L250,155"/>
+                
+                <!-- Loop -->
+                <rect x="70" y="160" width="360" height="260" rx="10" fill="none" stroke="#000" stroke-width="1" stroke-dasharray="5,3"/>
+                <text x="90" y="180" font-size="9" font-weight="bold">«loop» [|term| ≥ eps]</text>
+                
+                <rect class="uml-call" x="100" y="195" width="300" height="35" rx="15"/>
+                <text x="250" y="210" font-size="9">«call»</text>
+                <text x="250" y="223">term := nextTerm(term, count, x)</text>
+                
+                <path class="uml-arrow" d="M250,230 L250,260"/>
+                
+                <rect class="uml-action" x="140" y="265" width="220" height="30" rx="15"/>
+                <text x="250" y="285">sum := sum + term</text>
+                
+                <path class="uml-arrow" d="M250,295 L250,325"/>
+                
+                <rect class="uml-action" x="170" y="330" width="160" height="30" rx="15"/>
+                <text x="250" y="350">count := count + 1</text>
+                
+                <path class="uml-arrow" d="M250,420 L250,460"/>
+                
+                <circle class="uml-final-outer" cx="250" cy="485" r="12"/>
+                <circle class="uml-final-inner" cx="250" cy="485" r="6"/>
+                <text x="250" y="515" font-size="9">[return sum]</text>
+            </svg>
+        </div>
+        
+        <!-- UML nextTerm -->
+        <div class="diagram-section">
+            <h2>Функція nextTerm (UML)</h2>
+            <svg width="400" height="350" viewBox="0 0 400 350">
+                <circle class="uml-initial" cx="200" cy="25" r="10"/>
+                <text x="200" y="50" font-size="9">[параметри: prev, n, x]</text>
+                
+                <path class="uml-arrow" d="M200,55 L200,90"/>
+                
+                <rect class="uml-action" x="100" y="95" width="200" height="30" rx="15"/>
+                <text x="200" y="115">x2 := x × x</text>
+                
+                <path class="uml-arrow" d="M200,125 L200,160"/>
+                
+                <rect class="uml-action" x="50" y="165" width="300" height="40" rx="15"/>
+                <text x="200" y="185" font-size="9">result := prev × (2n-1)</text>
+                <text x="200" y="198" font-size="9">         / ((2n+1) × x2)</text>
+                
+                <path class="uml-arrow" d="M200,205 L200,250"/>
+                
+                <circle class="uml-final-outer" cx="200" cy="275" r="12"/>
+                <circle class="uml-final-inner" cx="200" cy="275" r="6"/>
+                <text x="200" y="305" font-size="9">[return result]</text>
+            </svg>
+        </div>
+        
+        <!-- UML arcthExact -->
+        <div class="diagram-section">
+            <h2>Функція arcthExact (UML)</h2>
+            <svg width="400" height="300" viewBox="0 0 400 300">
+                <circle class="uml-initial" cx="200" cy="25" r="10"/>
+                <text x="200" y="50" font-size="9">[параметр: x]</text>
+                
+                <path class="uml-arrow" d="M200,55 L200,95"/>
+                
+                <rect class="uml-action" x="50" y="100" width="300" height="40" rx="15"/>
+                <text x="200" y="125">result := 0.5 × ln((x+1)/(x-1))</text>
+                
+                <path class="uml-arrow" d="M200,140 L200,190"/>
+                
+                <circle class="uml-final-outer" cx="200" cy="215" r="12"/>
+                <circle class="uml-final-inner" cx="200" cy="215" r="6"/>
+                <text x="200" y="245" font-size="9">[return result]</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Unit Tests -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Unit Tests Results:</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem;">
+            <b>test_nextTerm():</b><br>
+            • nextTerm(a₀, 1, 2) = 0.0417 ✓<br>
+            • nextTerm(a₁, 2, 2) = 0.00625 ✓<br><br>
+            <b>test_arcthExact():</b><br>
+            • arcthExact(2) = 0.5493 ✓<br>
+            • arcthExact(3) = 0.3466 ✓<br>
+            • arcthExact(-2) = -0.5493 ✓<br><br>
+            <b>test_taylorSum():</b><br>
+            • taylorSum(2) = 0.5493, 12 terms ✓<br>
+            • taylorSum(5) = 0.2027, 6 terms ✓
+        </div>
+    </div>
+</body>
+</html>
+

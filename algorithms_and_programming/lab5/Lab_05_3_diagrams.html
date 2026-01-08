@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 5.3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #000; padding: 40px 20px; }
+        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; }
+        .section-title { text-align: center; font-size: 1.8rem; margin: 50px 0 30px; border-bottom: 3px solid #000; padding-bottom: 10px; max-width: 400px; margin-left: auto; margin-right: auto; }
+        .formula-box { background: #f9f9f9; border: 2px solid #000; border-radius: 8px; padding: 25px; max-width: 850px; margin: 0 auto 50px; }
+        .formula-box h3 { margin-bottom: 15px; font-size: 1.3rem; }
+        .formula { font-family: 'Cambria Math', serif; font-size: 1.05rem; line-height: 2; padding-left: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; max-width: 1800px; margin: 0 auto; }
+        .diagram-section { background: #fff; border: 2px solid #000; border-radius: 8px; padding: 20px; flex: 1; min-width: 350px; max-width: 480px; }
+        .diagram-section.wide { min-width: 520px; max-width: 620px; }
+        .diagram-section h2 { text-align: center; font-size: 1.2rem; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 8px; }
+        svg { display: block; margin: 0 auto; }
+        .terminal, .process, .decision, .io, .subroutine { fill: #fff; stroke: #000; stroke-width: 2; }
+        .arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+        .uml-initial { fill: #000; }
+        .uml-final-outer { fill: none; stroke: #000; stroke-width: 2; }
+        .uml-final-inner { fill: #000; }
+        .uml-action, .uml-call, .uml-decision { fill: #fff; stroke: #000; stroke-width: 2; }
+        .uml-call { fill: #f0f0f0; }
+        .uml-arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#uml-arrowhead); }
+        text { font-family: 'Segoe UI', sans-serif; fill: #000; font-size: 10px; text-anchor: middle; }
+        .label { font-size: 9px; font-weight: bold; }
+        @media (max-width: 1200px) { .diagram-section { min-width: 100%; max-width: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №5.3</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            Обчислити: <b>j(k) + j²(k-1) + 2·j(1)</b><br><br>
+            j(x) = (sin x + 1) / (cos²x + eˣ), при |x| ≥ 1<br>
+            j(x) = (1/cos 2x) · Σ(k=0..7) 2²ᵏ·x²ᵏ/(2k)!, при |x| < 1<br><br>
+            <b>Рекурентне співвідношення:</b> aₖ = aₖ₋₁ · 4x² / ((2k)(2k-1))
+        </div>
+    </div>
+    
+    <!-- БЛОК-СХЕМИ -->
+    <h2 class="section-title">Блок-схеми</h2>
+    
+    <div class="container">
+        <!-- Головна програма -->
+        <div class="diagram-section">
+            <h2>Головна програма</h2>
+            <svg width="360" height="550" viewBox="0 0 360 550">
+                <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#000"/></marker></defs>
+                
+                <ellipse class="terminal" cx="180" cy="28" rx="50" ry="18"/>
+                <text x="180" y="33">Початок</text>
+                
+                <path class="arrow" d="M180,46 L180,70"/>
+                
+                <polygon class="io" points="95,75 265,75 245,105 115,105"/>
+                <text x="180" y="95">Введення kпоч, kкін, n</text>
+                
+                <path class="arrow" d="M180,105 L180,130"/>
+                
+                <rect class="process" x="90" y="135" width="180" height="30" rx="5"/>
+                <text x="180" y="155">dk = (kкін - kпоч) / n</text>
+                
+                <path class="arrow" d="M180,165 L180,195"/>
+                
+                <rect class="process" x="110" y="200" width="140" height="28" rx="5"/>
+                <text x="180" y="218">i = 0, k = kпоч</text>
+                
+                <path class="arrow" d="M180,228 L180,260"/>
+                
+                <polygon class="decision" points="180,265 260,305 180,345 100,305"/>
+                <text x="180" y="308">i ≤ n?</text>
+                
+                <path class="arrow" d="M260,305 L310,305 L310,480 L180,480"/>
+                <text class="label" x="280" y="295">Ні</text>
+                
+                <path class="arrow" d="M180,345 L180,375"/>
+                <text class="label" x="195" y="362">Так</text>
+                
+                <rect class="subroutine" x="75" y="380" width="210" height="30" rx="5"/>
+                <line x1="90" y1="380" x2="90" y2="410" stroke="#000" stroke-width="2"/>
+                <line x1="270" y1="380" x2="270" y2="410" stroke="#000" stroke-width="2"/>
+                <text x="180" y="400">result = expression(k)</text>
+                
+                <path class="arrow" d="M180,410 L180,435"/>
+                
+                <polygon class="io" points="100,440 260,440 245,468 115,468"/>
+                <text x="180" y="458">Виведення k, result</text>
+                
+                <path class="arrow" d="M180,468 L50,468 L50,305 L100,305"/>
+                <rect class="process" x="30" y="455" width="60" height="25" rx="3"/>
+                <text x="60" y="472" font-size="8">i++, k+=dk</text>
+                
+                <path class="arrow" d="M180,480 L180,510"/>
+                <ellipse class="terminal" cx="180" cy="530" rx="50" ry="18"/>
+                <text x="180" y="535">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Функція j(x) -->
+        <div class="diagram-section wide">
+            <h2>Функція j(x)</h2>
+            <svg width="500" height="450" viewBox="0 0 500 450">
+                <ellipse class="terminal" cx="250" cy="28" rx="45" ry="18"/>
+                <text x="250" y="33">j(x)</text>
+                
+                <path class="arrow" d="M250,46 L250,80"/>
+                
+                <polygon class="decision" points="250,85 350,130 250,175 150,130"/>
+                <text x="250" y="133">|x| ≥ 1?</text>
+                
+                <path class="arrow" d="M350,130 L420,130 L420,220"/>
+                <text class="label" x="380" y="120">Так</text>
+                
+                <rect class="process" x="320" y="225" width="200" height="40" rx="5"/>
+                <text x="420" y="242" font-size="9">result = (sin(x)+1) /</text>
+                <text x="420" y="258" font-size="9">(cos²(x) + eˣ)</text>
+                
+                <path class="arrow" d="M150,130 L80,130 L80,220"/>
+                <text class="label" x="115" y="120">Ні</text>
+                
+                <rect class="subroutine" x="20" y="225" width="170" height="35" rx="5"/>
+                <line x1="35" y1="225" x2="35" y2="260" stroke="#000" stroke-width="2"/>
+                <line x1="175" y1="225" x2="175" y2="260" stroke="#000" stroke-width="2"/>
+                <text x="105" y="247">sum = calculateSum(x)</text>
+                
+                <path class="arrow" d="M105,260 L105,295"/>
+                
+                <rect class="process" x="20" y="300" width="170" height="35" rx="5"/>
+                <text x="105" y="322">result = sum / cos(2x)</text>
+                
+                <path class="arrow" d="M105,335 L105,370 L250,370"/>
+                <path class="arrow" d="M420,265 L420,370 L260,370"/>
+                
+                <path class="arrow" d="M250,370 L250,400"/>
+                <ellipse class="terminal" cx="250" cy="420" rx="60" ry="18"/>
+                <text x="250" y="425">return result</text>
+            </svg>
+        </div>
+        
+        <!-- Функція calculateSum -->
+        <div class="diagram-section">
+            <h2>Функція calculateSum(x)</h2>
+            <svg width="360" height="500" viewBox="0 0 360 500">
+                <ellipse class="terminal" cx="180" cy="25" rx="75" ry="18"/>
+                <text x="180" y="30">calculateSum(x)</text>
+                
+                <path class="arrow" d="M180,43 L180,70"/>
+                
+                <rect class="process" x="75" y="75" width="210" height="30" rx="5"/>
+                <text x="180" y="95">term = 1, sum = 1, k = 1</text>
+                
+                <path class="arrow" d="M180,105 L180,140"/>
+                
+                <polygon class="decision" points="180,145 260,185 180,225 100,185"/>
+                <text x="180" y="188">k ≤ 7?</text>
+                
+                <path class="arrow" d="M260,185 L310,185 L310,380 L180,380"/>
+                <text class="label" x="280" y="175">Ні</text>
+                
+                <path class="arrow" d="M180,225 L180,255"/>
+                <text class="label" x="195" y="242">Так</text>
+                
+                <rect class="subroutine" x="55" y="260" width="250" height="30" rx="5"/>
+                <line x1="70" y1="260" x2="70" y2="290" stroke="#000" stroke-width="2"/>
+                <line x1="290" y1="260" x2="290" y2="290" stroke="#000" stroke-width="2"/>
+                <text x="180" y="280">term = nextSumTerm(term, k, x)</text>
+                
+                <path class="arrow" d="M180,290 L180,320"/>
+                
+                <rect class="process" x="95" y="325" width="170" height="28" rx="5"/>
+                <text x="180" y="343">sum = sum + term</text>
+                
+                <path class="arrow" d="M180,353 L50,353 L50,185 L100,185"/>
+                <rect class="process" x="35" y="340" width="50" height="25" rx="3"/>
+                <text x="60" y="357" font-size="8">k++</text>
+                
+                <path class="arrow" d="M180,380 L180,420"/>
+                <ellipse class="terminal" cx="180" cy="440" rx="60" ry="18"/>
+                <text x="180" y="445">return sum</text>
+            </svg>
+        </div>
+        
+        <!-- Функція nextSumTerm -->
+        <div class="diagram-section">
+            <h2>Функція nextSumTerm(prev, k, x)</h2>
+            <svg width="360" height="300" viewBox="0 0 360 300">
+                <ellipse class="terminal" cx="180" cy="28" rx="95" ry="18"/>
+                <text x="180" y="33">nextSumTerm(prev, k, x)</text>
+                
+                <path class="arrow" d="M180,46 L180,80"/>
+                
+                <rect class="process" x="90" y="85" width="180" height="30" rx="5"/>
+                <text x="180" y="105">x2 = x * x</text>
+                
+                <path class="arrow" d="M180,115 L180,150"/>
+                
+                <rect class="process" x="45" y="155" width="270" height="35" rx="5"/>
+                <text x="180" y="170" font-size="9">result = prev * 4 * x2 /</text>
+                <text x="180" y="183" font-size="9">((2k) * (2k - 1))</text>
+                
+                <path class="arrow" d="M180,190 L180,230"/>
+                <ellipse class="terminal" cx="180" cy="250" rx="60" ry="18"/>
+                <text x="180" y="255">return result</text>
+            </svg>
+        </div>
+        
+        <!-- Функція expression -->
+        <div class="diagram-section">
+            <h2>Функція expression(k)</h2>
+            <svg width="360" height="380" viewBox="0 0 360 380">
+                <ellipse class="terminal" cx="180" cy="25" rx="65" ry="18"/>
+                <text x="180" y="30">expression(k)</text>
+                
+                <path class="arrow" d="M180,43 L180,70"/>
+                
+                <rect class="subroutine" x="90" y="75" width="180" height="28" rx="5"/>
+                <line x1="105" y1="75" x2="105" y2="103" stroke="#000" stroke-width="2"/>
+                <line x1="255" y1="75" x2="255" y2="103" stroke="#000" stroke-width="2"/>
+                <text x="180" y="93">jk = j(k)</text>
+                
+                <path class="arrow" d="M180,103 L180,130"/>
+                
+                <rect class="subroutine" x="90" y="135" width="180" height="28" rx="5"/>
+                <line x1="105" y1="135" x2="105" y2="163" stroke="#000" stroke-width="2"/>
+                <line x1="255" y1="135" x2="255" y2="163" stroke="#000" stroke-width="2"/>
+                <text x="180" y="153">jk1 = j(k - 1)</text>
+                
+                <path class="arrow" d="M180,163 L180,190"/>
+                
+                <rect class="subroutine" x="90" y="195" width="180" height="28" rx="5"/>
+                <line x1="105" y1="195" x2="105" y2="223" stroke="#000" stroke-width="2"/>
+                <line x1="255" y1="195" x2="255" y2="223" stroke="#000" stroke-width="2"/>
+                <text x="180" y="213">j1 = j(1)</text>
+                
+                <path class="arrow" d="M180,223 L180,255"/>
+                
+                <rect class="process" x="55" y="260" width="250" height="30" rx="5"/>
+                <text x="180" y="280">result = jk + jk1² + 2*j1</text>
+                
+                <path class="arrow" d="M180,290 L180,325"/>
+                <ellipse class="terminal" cx="180" cy="345" rx="60" ry="18"/>
+                <text x="180" y="350">return result</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- UML ACTIVITY ДІАГРАМИ -->
+    <h2 class="section-title">UML Activity діаграми</h2>
+    
+    <div class="container">
+        <!-- UML головна програма -->
+        <div class="diagram-section wide">
+            <h2>Головна програма (UML)</h2>
+            <svg width="480" height="480" viewBox="0 0 480 480">
+                <defs><marker id="uml-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#000"/></marker></defs>
+                
+                <circle class="uml-initial" cx="240" cy="20" r="8"/>
+                <path class="uml-arrow" d="M240,28 L240,50"/>
+                
+                <rect class="uml-action" x="120" y="55" width="240" height="30" rx="12"/>
+                <text x="240" y="75">Введення kпоч, kкін, n</text>
+                
+                <path class="uml-arrow" d="M240,85 L240,110"/>
+                
+                <rect x="70" y="115" width="340" height="260" rx="8" fill="none" stroke="#000" stroke-width="1" stroke-dasharray="4,2"/>
+                <text x="90" y="133" font-size="8" font-weight="bold">«loop» [i = 0..n]</text>
+                
+                <rect class="uml-action" x="120" y="145" width="240" height="28" rx="12"/>
+                <text x="240" y="163">k := kпоч + i × dk</text>
+                
+                <path class="uml-arrow" d="M240,173 L240,200"/>
+                
+                <rect class="uml-call" x="110" y="205" width="260" height="35" rx="12"/>
+                <text x="240" y="220" font-size="9">«call»</text>
+                <text x="240" y="233">result := expression(k)</text>
+                
+                <path class="uml-arrow" d="M240,240 L240,270"/>
+                
+                <rect class="uml-action" x="120" y="275" width="240" height="28" rx="12"/>
+                <text x="240" y="293">Виведення k, result</text>
+                
+                <path class="uml-arrow" d="M240,375 L240,410"/>
+                
+                <circle class="uml-final-outer" cx="240" cy="430" r="10"/>
+                <circle class="uml-final-inner" cx="240" cy="430" r="5"/>
+            </svg>
+        </div>
+        
+        <!-- UML j(x) -->
+        <div class="diagram-section wide">
+            <h2>Функція j(x) (UML)</h2>
+            <svg width="500" height="420" viewBox="0 0 500 420">
+                <circle class="uml-initial" cx="250" cy="20" r="8"/>
+                <text x="250" y="42" font-size="8">[параметр: x]</text>
+                
+                <path class="uml-arrow" d="M250,45 L250,75"/>
+                
+                <polygon class="uml-decision" points="250,80 330,120 250,160 170,120"/>
+                <text x="250" y="123" font-size="9">[|x| ≥ 1]</text>
+                
+                <path class="uml-arrow" d="M330,120 L400,120 L400,190"/>
+                <text class="label" x="360" y="110">[true]</text>
+                
+                <rect class="uml-action" x="300" y="195" width="200" height="40" rx="12"/>
+                <text x="400" y="212" font-size="9">result := (sin x + 1) /</text>
+                <text x="400" y="226" font-size="9">(cos²x + eˣ)</text>
+                
+                <path class="uml-arrow" d="M170,120 L100,120 L100,190"/>
+                <text class="label" x="135" y="110">[false]</text>
+                
+                <rect class="uml-call" x="20" y="195" width="160" height="35" rx="12"/>
+                <text x="100" y="210" font-size="8">«call»</text>
+                <text x="100" y="222">sum := calculateSum(x)</text>
+                
+                <path class="uml-arrow" d="M100,230 L100,265"/>
+                
+                <rect class="uml-action" x="20" y="270" width="160" height="30" rx="12"/>
+                <text x="100" y="290">result := sum / cos(2x)</text>
+                
+                <rect x="90" y="330" width="320" height="5" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M100,300 L100,325"/>
+                <path class="uml-arrow" d="M400,235 L400,325"/>
+                
+                <path class="uml-arrow" d="M250,335 L250,370"/>
+                
+                <circle class="uml-final-outer" cx="250" cy="390" r="10"/>
+                <circle class="uml-final-inner" cx="250" cy="390" r="5"/>
+                <text x="250" y="415" font-size="8">[return result]</text>
+            </svg>
+        </div>
+        
+        <!-- UML expression -->
+        <div class="diagram-section">
+            <h2>Функція expression(k) (UML)</h2>
+            <svg width="380" height="400" viewBox="0 0 380 400">
+                <circle class="uml-initial" cx="190" cy="20" r="8"/>
+                <text x="190" y="42" font-size="8">[параметр: k]</text>
+                
+                <path class="uml-arrow" d="M190,45 L190,70"/>
+                
+                <rect class="uml-call" x="100" y="75" width="180" height="30" rx="12"/>
+                <text x="190" y="90" font-size="8">«call» jk := j(k)</text>
+                
+                <path class="uml-arrow" d="M190,105 L190,130"/>
+                
+                <rect class="uml-call" x="90" y="135" width="200" height="30" rx="12"/>
+                <text x="190" y="150" font-size="8">«call» jk1 := j(k - 1)</text>
+                
+                <path class="uml-arrow" d="M190,165 L190,190"/>
+                
+                <rect class="uml-call" x="100" y="195" width="180" height="30" rx="12"/>
+                <text x="190" y="210" font-size="8">«call» j1 := j(1)</text>
+                
+                <path class="uml-arrow" d="M190,225 L190,255"/>
+                
+                <rect class="uml-action" x="60" y="260" width="260" height="30" rx="12"/>
+                <text x="190" y="280">result := jk + jk1² + 2·j1</text>
+                
+                <path class="uml-arrow" d="M190,290 L190,330"/>
+                
+                <circle class="uml-final-outer" cx="190" cy="350" r="10"/>
+                <circle class="uml-final-inner" cx="190" cy="350" r="5"/>
+                <text x="190" y="375" font-size="8">[return result]</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Unit Tests -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Unit Tests Results:</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem;">
+            <b>test_nextSumTerm():</b> ✓ PASS<br>
+            <b>test_calculateSum():</b> ✓ PASS<br>
+            <b>test_j_function():</b> j(2)=0.252, j(0.5)=2.856, j(1)=0.612 ✓<br>
+            <b>test_expression():</b> expression(2)=1.850 ✓<br><br>
+            <b>ALL TESTS PASSED!</b>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 3.4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            min-height: 100vh;
+            color: #000;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 40px;
+        }
+        
+        .formula-box {
+            background: #f9f9f9;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 25px;
+            max-width: 750px;
+            margin: 0 auto 50px;
+        }
+        
+        .formula-box h3 {
+            color: #000;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .formula {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.1rem;
+            line-height: 2;
+            padding-left: 20px;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        .diagram-section {
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 30px;
+            flex: 1;
+            min-width: 650px;
+            max-width: 800px;
+        }
+        
+        .diagram-section h2 {
+            text-align: center;
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        
+        svg {
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .terminal {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .process {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .decision {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .io {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .arrow {
+            stroke: #000;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+        
+        text {
+            font-family: 'Segoe UI', sans-serif;
+            fill: #000;
+            font-size: 11px;
+            text-anchor: middle;
+        }
+        
+        .label {
+            font-size: 10px;
+            font-weight: bold;
+            fill: #000;
+        }
+        
+        .uml-initial {
+            fill: #000;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .uml-final-outer {
+            fill: none;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .uml-final-inner {
+            fill: #000;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .uml-action {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .uml-decision {
+            fill: #fff;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        
+        .uml-arrow {
+            stroke: #000;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#uml-arrowhead);
+        }
+        
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border: 1px solid #000;
+            border-radius: 8px;
+        }
+        
+        .legend h4 {
+            color: #000;
+            margin-bottom: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+        
+        .legend-shape {
+            width: 30px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 1400px) {
+            .diagram-section {
+                min-width: 100%;
+            }
+        }
+        
+        @media print {
+            body {
+                padding: 10px;
+            }
+            .diagram-section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №3.4</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            Визначити чи потрапляє точка (x, y) в сіру область:<br><br>
+            <b>Чверть кола</b> (I квадрант): x ≥ 0, y ≥ 0, x² + y² ≤ R²<br>
+            <b>Трикутник</b> (III квадрант): x ≤ 0, y ≤ 0, x + y ≥ -R<br><br>
+            Точка в області ⟺ (в колі) АБО (в трикутнику)
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Блок-схема -->
+        <div class="diagram-section">
+            <h2>Блок-схема</h2>
+            
+            <svg width="700" height="850" viewBox="0 0 700 850">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+                    </marker>
+                </defs>
+                
+                <!-- Початок -->
+                <ellipse class="terminal" cx="350" cy="35" rx="60" ry="25"/>
+                <text x="350" y="40">Початок</text>
+                
+                <path class="arrow" d="M350,60 L350,90"/>
+                
+                <!-- Введення R, x, y -->
+                <polygon class="io" points="260,95 440,95 420,135 280,135"/>
+                <text x="350" y="120">Введення R, x, y</text>
+                
+                <path class="arrow" d="M350,135 L350,175"/>
+                
+                <!-- Обчислення умов -->
+                <rect class="process" x="200" y="180" width="300" height="50" rx="5"/>
+                <text x="350" y="200" font-size="9">inCircle = (x≥0) ∧ (y≥0) ∧ (x²+y²≤R²)</text>
+                <text x="350" y="215" font-size="9">inTriangle = (x≤0) ∧ (y≤0) ∧ (x+y≥-R)</text>
+                
+                <path class="arrow" d="M350,230 L350,270"/>
+                
+                <!-- Ромб: inCircle OR inTriangle? -->
+                <polygon class="decision" points="350,275 480,345 350,415 220,345"/>
+                <text x="350" y="335" font-size="10">inCircle</text>
+                <text x="350" y="350" font-size="10">OR</text>
+                <text x="350" y="365" font-size="10">inTriangle?</text>
+                
+                <!-- Так: в області -->
+                <path class="arrow" d="M480,345 L580,345 L580,460"/>
+                <text class="label" x="525" y="335">Так</text>
+                
+                <polygon class="io" points="490,465 670,465 650,505 510,505"/>
+                <text x="580" y="490">"В області"</text>
+                
+                <!-- Ні: поза областю -->
+                <path class="arrow" d="M220,345 L120,345 L120,460"/>
+                <text class="label" x="175" y="335">Ні</text>
+                
+                <polygon class="io" points="30,465 210,465 190,505 50,505"/>
+                <text x="120" y="490">"Поза областю"</text>
+                
+                <!-- З'єднання -->
+                <path class="arrow" d="M580,505 L580,560 L350,560"/>
+                <path class="arrow" d="M120,505 L120,560 L340,560"/>
+                
+                <path class="arrow" d="M350,560 L350,610"/>
+                
+                <!-- Кінець -->
+                <ellipse class="terminal" cx="350" cy="640" rx="60" ry="25"/>
+                <text x="350" y="645">Кінець</text>
+            </svg>
+            
+            <div class="legend">
+                <h4>Умовні позначення:</h4>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000; border-radius: 50%;"></div>
+                    <span>Термінатор (початок/кінець)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000; transform: skewX(-10deg);"></div>
+                    <span>Введення/виведення даних</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000;"></div>
+                    <span>Процес (обчислення)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000; transform: rotate(45deg); width: 15px; height: 15px;"></div>
+                    <span>Рішення (умова)</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UML Activity діаграма -->
+        <div class="diagram-section">
+            <h2>UML Activity Diagram</h2>
+            
+            <svg width="700" height="750" viewBox="0 0 700 750">
+                <defs>
+                    <marker id="uml-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+                    </marker>
+                </defs>
+                
+                <!-- Initial node -->
+                <circle class="uml-initial" cx="350" cy="30" r="12"/>
+                
+                <path class="uml-arrow" d="M350,42 L350,70"/>
+                
+                <!-- Action: Введення R, x, y -->
+                <rect class="uml-action" x="220" y="75" width="260" height="45" rx="15"/>
+                <text x="350" y="103">Введення значень R, x, y</text>
+                
+                <path class="uml-arrow" d="M350,120 L350,160"/>
+                
+                <!-- Action: Обчислення умов -->
+                <rect class="uml-action" x="180" y="165" width="340" height="55" rx="15"/>
+                <text x="350" y="188" font-size="10">Обчислення:</text>
+                <text x="350" y="205" font-size="9">inCircle, inTriangle</text>
+                
+                <path class="uml-arrow" d="M350,220 L350,265"/>
+                
+                <!-- Decision diamond -->
+                <polygon class="uml-decision" points="350,270 450,330 350,390 250,330"/>
+                <text x="350" y="325" font-size="10">[inArea]</text>
+                
+                <!-- Branch: Yes -->
+                <path class="uml-arrow" d="M450,330 L550,330 L550,430"/>
+                <text x="495" y="320" font-size="9">[true]</text>
+                
+                <rect class="uml-action" x="450" y="435" width="200" height="45" rx="15"/>
+                <text x="550" y="463">"Точка в області"</text>
+                
+                <!-- Branch: No -->
+                <path class="uml-arrow" d="M250,330 L150,330 L150,430"/>
+                <text x="205" y="320" font-size="9">[false]</text>
+                
+                <rect class="uml-action" x="50" y="435" width="200" height="45" rx="15"/>
+                <text x="150" y="463">"Точка поза областю"</text>
+                
+                <!-- Merge node -->
+                <rect x="130" y="540" width="440" height="6" rx="3" fill="#000"/>
+                
+                <path class="uml-arrow" d="M150,480 L150,530"/>
+                <path class="uml-arrow" d="M550,480 L550,530"/>
+                
+                <path class="uml-arrow" d="M350,546 L350,590"/>
+                
+                <!-- Final node -->
+                <circle class="uml-final-outer" cx="350" cy="620" r="15"/>
+                <circle class="uml-final-inner" cx="350" cy="620" r="8"/>
+                
+                <text x="350" y="680" font-size="14" fill="#555">Activity Diagram - Variant 31 (Lab 3.4)</text>
+            </svg>
+            
+            <div class="legend">
+                <h4>UML Activity Notation:</h4>
+                <div class="legend-item">
+                    <div style="width: 20px; height: 20px; background: #000; border-radius: 50%;"></div>
+                    <span>Initial Node (початок)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000; border-radius: 12px;"></div>
+                    <span>Action (дія)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape" style="background: #fff; border: 2px solid #000; transform: rotate(45deg); width: 15px; height: 15px;"></div>
+                    <span>Decision Node (рішення)</span>
+                </div>
+                <div class="legend-item">
+                    <div style="width: 30px; height: 4px; background: #000; border-radius: 2px;"></div>
+                    <span>Merge Node (об'єднання)</span>
+                </div>
+                <div class="legend-item">
+                    <div style="width: 20px; height: 20px; border: 2px solid #000; border-radius: 50%; position: relative;">
+                        <div style="position: absolute; top: 3px; left: 3px; width: 10px; height: 10px; background: #000; border-radius: 50%;"></div>
+                    </div>
+                    <span>Activity Final Node (кінець)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

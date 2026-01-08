@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 5.4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #000; padding: 40px 20px; }
+        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; }
+        .section-title { text-align: center; font-size: 1.8rem; margin: 50px 0 30px; border-bottom: 3px solid #000; padding-bottom: 10px; max-width: 400px; margin-left: auto; margin-right: auto; }
+        .formula-box { background: #f9f9f9; border: 2px solid #000; border-radius: 8px; padding: 25px; max-width: 900px; margin: 0 auto 50px; }
+        .formula-box h3 { margin-bottom: 15px; font-size: 1.3rem; }
+        .formula { font-family: 'Cambria Math', serif; font-size: 1.05rem; line-height: 2; padding-left: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1900px; margin: 0 auto; }
+        .diagram-section { background: #fff; border: 2px solid #000; border-radius: 8px; padding: 15px; flex: 1; min-width: 320px; max-width: 380px; }
+        .diagram-section h2 { text-align: center; font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+        svg { display: block; margin: 0 auto; }
+        .terminal, .process, .decision, .io { fill: #fff; stroke: #000; stroke-width: 2; }
+        .arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+        .uml-initial { fill: #000; }
+        .uml-final-outer { fill: none; stroke: #000; stroke-width: 2; }
+        .uml-final-inner { fill: #000; }
+        .uml-action, .uml-call, .uml-decision { fill: #fff; stroke: #000; stroke-width: 2; }
+        .uml-call { fill: #f0f0f0; }
+        .uml-arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#uml-arrowhead); }
+        text { font-family: 'Segoe UI', sans-serif; fill: #000; font-size: 9px; text-anchor: middle; }
+        .label { font-size: 8px; font-weight: bold; }
+        @media (max-width: 1200px) { .diagram-section { min-width: 100%; max-width: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №5.4</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            Обчислити добуток: П(i=1..15) (sin²i + cos²(1/i)) / i²<br><br>
+            <b>5 способів обчислення:</b><br>
+            1. Рекурсивний спуск, параметр спадає (n → 1)<br>
+            2. Рекурсивний спуск, параметр зростає (1 → n)<br>
+            3. Рекурсивний підйом, параметр спадає (n → 1)<br>
+            4. Рекурсивний підйом, параметр зростає (1 → n)<br>
+            5. Ітеративний (контрольний)
+        </div>
+    </div>
+    
+    <!-- БЛОК-СХЕМИ -->
+    <h2 class="section-title">Блок-схеми</h2>
+    
+    <div class="container">
+        <!-- Функція term(i) -->
+        <div class="diagram-section">
+            <h2>term(i)</h2>
+            <svg width="300" height="250" viewBox="0 0 300 250">
+                <defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <ellipse class="terminal" cx="150" cy="25" rx="40" ry="15"/>
+                <text x="150" y="29">term(i)</text>
+                <path class="arrow" d="M150,40 L150,70"/>
+                <rect class="process" x="40" y="75" width="220" height="35" rx="4"/>
+                <text x="150" y="90" font-size="8">result = (sin²(i) + cos²(1/i)) / i²</text>
+                <path class="arrow" d="M150,110 L150,145"/>
+                <ellipse class="terminal" cx="150" cy="165" rx="50" ry="15"/>
+                <text x="150" y="169">return result</text>
+            </svg>
+        </div>
+        
+        <!-- Спосіб 1 -->
+        <div class="diagram-section">
+            <h2>1. Спуск, параметр спадає</h2>
+            <svg width="300" height="320" viewBox="0 0 300 320">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">productDescentDesc(n)</text>
+                <path class="arrow" d="M150,36 L150,60"/>
+                <polygon class="decision" points="150,65 220,100 150,135 80,100"/>
+                <text x="150" y="103">n < 1?</text>
+                <path class="arrow" d="M220,100 L260,100 L260,180"/>
+                <text class="label" x="235" y="92">Так</text>
+                <rect class="process" x="220" y="185" width="70" height="25" rx="3"/>
+                <text x="255" y="201">return 1</text>
+                <path class="arrow" d="M80,100 L40,100 L40,160"/>
+                <text class="label" x="60" y="92">Ні</text>
+                <rect class="process" x="10" y="165" width="140" height="30" rx="3"/>
+                <text x="80" y="178" font-size="8">return term(n) *</text>
+                <text x="80" y="190" font-size="8">productDescentDesc(n-1)</text>
+                <path class="arrow" d="M80,195 L80,240 L150,240"/>
+                <path class="arrow" d="M255,210 L255,240 L160,240"/>
+                <path class="arrow" d="M150,240 L150,270"/>
+                <ellipse class="terminal" cx="150" cy="290" rx="35" ry="14"/>
+                <text x="150" y="294">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Спосіб 2 -->
+        <div class="diagram-section">
+            <h2>2. Спуск, параметр зростає</h2>
+            <svg width="300" height="320" viewBox="0 0 300 320">
+                <ellipse class="terminal" cx="150" cy="22" rx="75" ry="14"/>
+                <text x="150" y="26">productDescentAsc(i, n)</text>
+                <path class="arrow" d="M150,36 L150,60"/>
+                <polygon class="decision" points="150,65 220,100 150,135 80,100"/>
+                <text x="150" y="103">i > n?</text>
+                <path class="arrow" d="M220,100 L260,100 L260,180"/>
+                <text class="label" x="235" y="92">Так</text>
+                <rect class="process" x="220" y="185" width="70" height="25" rx="3"/>
+                <text x="255" y="201">return 1</text>
+                <path class="arrow" d="M80,100 L40,100 L40,160"/>
+                <text class="label" x="60" y="92">Ні</text>
+                <rect class="process" x="5" y="165" width="150" height="30" rx="3"/>
+                <text x="80" y="178" font-size="8">return term(i) *</text>
+                <text x="80" y="190" font-size="8">productDescentAsc(i+1,n)</text>
+                <path class="arrow" d="M80,195 L80,240 L150,240"/>
+                <path class="arrow" d="M255,210 L255,240 L160,240"/>
+                <path class="arrow" d="M150,240 L150,270"/>
+                <ellipse class="terminal" cx="150" cy="290" rx="35" ry="14"/>
+                <text x="150" y="294">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Спосіб 3 -->
+        <div class="diagram-section">
+            <h2>3. Підйом, параметр спадає</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">productAscentDesc(n)</text>
+                <path class="arrow" d="M150,36 L150,60"/>
+                <polygon class="decision" points="150,65 220,100 150,135 80,100"/>
+                <text x="150" y="103">n < 1?</text>
+                <path class="arrow" d="M220,100 L260,100 L260,155"/>
+                <text class="label" x="235" y="92">Так</text>
+                <rect class="process" x="220" y="160" width="70" height="25" rx="3"/>
+                <text x="255" y="176">return 1</text>
+                <path class="arrow" d="M80,100 L40,100 L40,150"/>
+                <text class="label" x="60" y="92">Ні</text>
+                <rect class="process" x="5" y="155" width="135" height="25" rx="3"/>
+                <text x="72" y="171" font-size="8">r = productAscentDesc(n-1)</text>
+                <path class="arrow" d="M72,180 L72,210"/>
+                <rect class="process" x="10" y="215" width="125" height="25" rx="3"/>
+                <text x="72" y="231" font-size="8">return r * term(n)</text>
+                <path class="arrow" d="M72,240 L72,290 L150,290"/>
+                <path class="arrow" d="M255,185 L255,290 L160,290"/>
+                <path class="arrow" d="M150,290 L150,320"/>
+                <ellipse class="terminal" cx="150" cy="340" rx="35" ry="14"/>
+                <text x="150" y="344">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Спосіб 4 -->
+        <div class="diagram-section">
+            <h2>4. Підйом, параметр зростає</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <ellipse class="terminal" cx="150" cy="22" rx="75" ry="14"/>
+                <text x="150" y="26">productAscentAsc(i, n)</text>
+                <path class="arrow" d="M150,36 L150,60"/>
+                <polygon class="decision" points="150,65 220,100 150,135 80,100"/>
+                <text x="150" y="103">i > n?</text>
+                <path class="arrow" d="M220,100 L260,100 L260,155"/>
+                <text class="label" x="235" y="92">Так</text>
+                <rect class="process" x="220" y="160" width="70" height="25" rx="3"/>
+                <text x="255" y="176">return 1</text>
+                <path class="arrow" d="M80,100 L40,100 L40,150"/>
+                <text class="label" x="60" y="92">Ні</text>
+                <rect class="process" x="0" y="155" width="140" height="25" rx="3"/>
+                <text x="70" y="171" font-size="8">r = productAscentAsc(i+1,n)</text>
+                <path class="arrow" d="M70,180 L70,210"/>
+                <rect class="process" x="10" y="215" width="120" height="25" rx="3"/>
+                <text x="70" y="231" font-size="8">return r * term(i)</text>
+                <path class="arrow" d="M70,240 L70,290 L150,290"/>
+                <path class="arrow" d="M255,185 L255,290 L160,290"/>
+                <path class="arrow" d="M150,290 L150,320"/>
+                <ellipse class="terminal" cx="150" cy="340" rx="35" ry="14"/>
+                <text x="150" y="344">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Спосіб 5 (ітеративний) -->
+        <div class="diagram-section">
+            <h2>5. Ітеративний</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <ellipse class="terminal" cx="150" cy="22" rx="65" ry="14"/>
+                <text x="150" y="26">productIterative(n)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="80" y="60" width="140" height="25" rx="3"/>
+                <text x="150" y="76">product = 1, i = 1</text>
+                <path class="arrow" d="M150,85 L150,110"/>
+                <polygon class="decision" points="150,115 220,150 150,185 80,150"/>
+                <text x="150" y="153">i ≤ n?</text>
+                <path class="arrow" d="M220,150 L260,150 L260,280 L150,280"/>
+                <text class="label" x="235" y="142">Ні</text>
+                <path class="arrow" d="M150,185 L150,210"/>
+                <text class="label" x="165" y="200">Так</text>
+                <rect class="process" x="60" y="215" width="180" height="25" rx="3"/>
+                <text x="150" y="231">product = product * term(i)</text>
+                <path class="arrow" d="M150,240 L150,260 L40,260 L40,150 L80,150"/>
+                <rect class="process" x="25" y="248" width="45" height="20" rx="2"/>
+                <text x="47" y="262" font-size="7">i++</text>
+                <path class="arrow" d="M150,280 L150,310"/>
+                <ellipse class="terminal" cx="150" cy="335" rx="55" ry="14"/>
+                <text x="150" y="339">return product</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- UML ACTIVITY ДІАГРАМИ -->
+    <h2 class="section-title">UML Activity діаграми</h2>
+    
+    <div class="container">
+        <!-- UML Спуск спадає -->
+        <div class="diagram-section">
+            <h2>1. Спуск, спадає (UML)</h2>
+            <svg width="300" height="300" viewBox="0 0 300 300">
+                <defs><marker id="uml-arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[n]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <polygon class="uml-decision" points="150,65 210,100 150,135 90,100"/>
+                <text x="150" y="103" font-size="8">[n < 1]</text>
+                <path class="uml-arrow" d="M210,100 L250,100 L250,160"/>
+                <rect class="uml-action" x="210" y="165" width="70" height="22" rx="8"/>
+                <text x="245" y="179">return 1</text>
+                <path class="uml-arrow" d="M90,100 L50,100 L50,160"/>
+                <rect class="uml-action" x="10" y="165" width="120" height="30" rx="8"/>
+                <text x="70" y="178" font-size="7">return term(n) ×</text>
+                <text x="70" y="190" font-size="7">f(n-1)</text>
+                <rect x="60" y="225" width="130" height="4" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M70,195 L70,220"/>
+                <path class="uml-arrow" d="M245,187 L245,220"/>
+                <path class="uml-arrow" d="M125,229 L125,260"/>
+                <circle class="uml-final-outer" cx="125" cy="275" r="8"/>
+                <circle class="uml-final-inner" cx="125" cy="275" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML Спуск зростає -->
+        <div class="diagram-section">
+            <h2>2. Спуск, зростає (UML)</h2>
+            <svg width="300" height="300" viewBox="0 0 300 300">
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[i, n]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <polygon class="uml-decision" points="150,65 210,100 150,135 90,100"/>
+                <text x="150" y="103" font-size="8">[i > n]</text>
+                <path class="uml-arrow" d="M210,100 L250,100 L250,160"/>
+                <rect class="uml-action" x="210" y="165" width="70" height="22" rx="8"/>
+                <text x="245" y="179">return 1</text>
+                <path class="uml-arrow" d="M90,100 L50,100 L50,160"/>
+                <rect class="uml-action" x="10" y="165" width="120" height="30" rx="8"/>
+                <text x="70" y="178" font-size="7">return term(i) ×</text>
+                <text x="70" y="190" font-size="7">f(i+1, n)</text>
+                <rect x="60" y="225" width="130" height="4" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M70,195 L70,220"/>
+                <path class="uml-arrow" d="M245,187 L245,220"/>
+                <path class="uml-arrow" d="M125,229 L125,260"/>
+                <circle class="uml-final-outer" cx="125" cy="275" r="8"/>
+                <circle class="uml-final-inner" cx="125" cy="275" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML Підйом спадає -->
+        <div class="diagram-section">
+            <h2>3. Підйом, спадає (UML)</h2>
+            <svg width="300" height="340" viewBox="0 0 300 340">
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[n]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <polygon class="uml-decision" points="150,65 210,100 150,135 90,100"/>
+                <text x="150" y="103" font-size="8">[n < 1]</text>
+                <path class="uml-arrow" d="M210,100 L250,100 L250,150"/>
+                <rect class="uml-action" x="210" y="155" width="70" height="22" rx="8"/>
+                <text x="245" y="169">return 1</text>
+                <path class="uml-arrow" d="M90,100 L50,100 L50,145"/>
+                <rect class="uml-call" x="10" y="150" width="100" height="25" rx="8"/>
+                <text x="60" y="166" font-size="7">r := f(n-1)</text>
+                <path class="uml-arrow" d="M60,175 L60,205"/>
+                <rect class="uml-action" x="10" y="210" width="100" height="25" rx="8"/>
+                <text x="60" y="226" font-size="7">return r×term(n)</text>
+                <rect x="55" y="265" width="140" height="4" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M60,235 L60,260"/>
+                <path class="uml-arrow" d="M245,177 L245,260"/>
+                <path class="uml-arrow" d="M125,269 L125,300"/>
+                <circle class="uml-final-outer" cx="125" cy="315" r="8"/>
+                <circle class="uml-final-inner" cx="125" cy="315" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML Підйом зростає -->
+        <div class="diagram-section">
+            <h2>4. Підйом, зростає (UML)</h2>
+            <svg width="300" height="340" viewBox="0 0 300 340">
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[i, n]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <polygon class="uml-decision" points="150,65 210,100 150,135 90,100"/>
+                <text x="150" y="103" font-size="8">[i > n]</text>
+                <path class="uml-arrow" d="M210,100 L250,100 L250,150"/>
+                <rect class="uml-action" x="210" y="155" width="70" height="22" rx="8"/>
+                <text x="245" y="169">return 1</text>
+                <path class="uml-arrow" d="M90,100 L50,100 L50,145"/>
+                <rect class="uml-call" x="5" y="150" width="110" height="25" rx="8"/>
+                <text x="60" y="166" font-size="7">r := f(i+1, n)</text>
+                <path class="uml-arrow" d="M60,175 L60,205"/>
+                <rect class="uml-action" x="10" y="210" width="100" height="25" rx="8"/>
+                <text x="60" y="226" font-size="7">return r×term(i)</text>
+                <rect x="55" y="265" width="140" height="4" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M60,235 L60,260"/>
+                <path class="uml-arrow" d="M245,177 L245,260"/>
+                <path class="uml-arrow" d="M125,269 L125,300"/>
+                <circle class="uml-final-outer" cx="125" cy="315" r="8"/>
+                <circle class="uml-final-inner" cx="125" cy="315" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML Ітеративний -->
+        <div class="diagram-section">
+            <h2>5. Ітеративний (UML)</h2>
+            <svg width="300" height="320" viewBox="0 0 300 320">
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[n]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <rect class="uml-action" x="70" y="65" width="160" height="22" rx="8"/>
+                <text x="150" y="79">product := 1</text>
+                <path class="uml-arrow" d="M150,87 L150,110"/>
+                <rect x="50" y="115" width="200" height="120" rx="6" fill="none" stroke="#000" stroke-dasharray="3,2"/>
+                <text x="70" y="130" font-size="7" font-weight="bold">«loop» [i = 1..n]</text>
+                <rect class="uml-action" x="70" y="145" width="160" height="25" rx="8"/>
+                <text x="150" y="161" font-size="8">product := product × term(i)</text>
+                <path class="uml-arrow" d="M150,235 L150,265"/>
+                <rect class="uml-action" x="70" y="270" width="160" height="22" rx="8"/>
+                <text x="150" y="284">return product</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Results -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Результати обчислення (n = 15):</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.95rem;">
+            Всі 5 методів дають однаковий результат:<br><br>
+            <b>П(i=1..15) = 8.789229557203 × 10⁻²³</b><br><br>
+            ✅ ALL 5 RESULTS MATCH!
+        </div>
+    </div>
+</body>
+</html>
+

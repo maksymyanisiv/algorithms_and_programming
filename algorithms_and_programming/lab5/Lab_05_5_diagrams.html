@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 5.5</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #000; padding: 40px 20px; }
+        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; }
+        .section-title { text-align: center; font-size: 1.8rem; margin: 50px 0 30px; border-bottom: 3px solid #000; padding-bottom: 10px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .formula-box { background: #f9f9f9; border: 2px solid #000; border-radius: 8px; padding: 25px; max-width: 900px; margin: 0 auto 50px; }
+        .formula-box h3 { margin-bottom: 15px; font-size: 1.3rem; }
+        .formula { font-family: 'Cambria Math', serif; font-size: 1.05rem; line-height: 2; padding-left: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1900px; margin: 0 auto; }
+        .diagram-section { background: #fff; border: 2px solid #000; border-radius: 8px; padding: 15px; flex: 1; min-width: 320px; max-width: 380px; }
+        .diagram-section h2 { text-align: center; font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+        svg { display: block; margin: 0 auto; }
+        .terminal, .process, .decision, .io { fill: #fff; stroke: #000; stroke-width: 2; }
+        .arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+        .uml-initial { fill: #000; }
+        .uml-final-outer { fill: none; stroke: #000; stroke-width: 2; }
+        .uml-final-inner { fill: #000; }
+        .uml-action, .uml-call, .uml-decision { fill: #fff; stroke: #000; stroke-width: 2; }
+        .uml-call { fill: #f0f0f0; }
+        .uml-arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#uml-arrowhead); }
+        text { font-family: 'Segoe UI', sans-serif; fill: #000; font-size: 9px; text-anchor: middle; }
+        .label { font-size: 8px; font-weight: bold; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .results-table th, .results-table td { border: 1px solid #000; padding: 8px 12px; text-align: center; }
+        .results-table th { background: #f0f0f0; font-weight: bold; }
+        .results-table tr:nth-child(even) { background: #fafafa; }
+        @media (max-width: 1200px) { .diagram-section { min-width: 100%; max-width: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №5.5</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            Визначити рекурсивні функції зображення натурального числа у:<br><br>
+            1. <b>Двійковій системі числення</b> (base = 2)<br>
+            2. <b>Вісімковій системі числення</b> (base = 8)<br>
+            3. <b>Системі числення з основою N</b> (N > 1)<br><br>
+            <b>Алгоритм:</b> Ділимо число на основу, рекурсивно обробляємо частку,<br>
+            потім виводимо залишок від ділення.<br><br>
+            <b>Глибина рекурсії:</b> дорівнює кількості цифр у числі = ⌊log<sub>base</sub>(n)⌋ + 1
+        </div>
+    </div>
+    
+    <!-- БЛОК-СХЕМИ -->
+    <h2 class="section-title">Блок-схеми</h2>
+    
+    <div class="container">
+        <!-- Двійкова система -->
+        <div class="diagram-section">
+            <h2>toBinaryRecursive(n)</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">toBinaryRecursive(n)</text>
+                <path class="arrow" d="M150,36 L150,60"/>
+                <rect class="process" x="70" y="65" width="160" height="25" rx="3"/>
+                <text x="150" y="81">trackDepth()</text>
+                <path class="arrow" d="M150,90 L150,115"/>
+                <polygon class="decision" points="150,120 220,155 150,190 80,155"/>
+                <text x="150" y="158">n < 2?</text>
+                <path class="arrow" d="M220,155 L260,155 L260,210"/>
+                <text class="label" x="235" y="147">Так</text>
+                <rect class="process" x="200" y="215" width="110" height="25" rx="3"/>
+                <text x="255" y="231">result = str(n%2)</text>
+                <path class="arrow" d="M80,155 L40,155 L40,205"/>
+                <text class="label" x="60" y="147">Ні</text>
+                <rect class="process" x="5" y="210" width="130" height="30" rx="3"/>
+                <text x="70" y="223" font-size="8">result = toBinary(n/2)</text>
+                <text x="70" y="235" font-size="8">+ str(n%2)</text>
+                <path class="arrow" d="M70,240 L70,280 L150,280"/>
+                <path class="arrow" d="M255,240 L255,280 L160,280"/>
+                <path class="arrow" d="M150,280 L150,310"/>
+                <rect class="process" x="70" y="315" width="160" height="25" rx="3"/>
+                <text x="150" y="331">return result</text>
+                <path class="arrow" d="M150,340 L150,360"/>
+                <ellipse class="terminal" cx="150" cy="372" rx="35" ry="12"/>
+                <text x="150" y="376">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Вісімкова система -->
+        <div class="diagram-section">
+            <h2>toOctalRecursive(n)</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">toOctalRecursive(n)</text>
+                <path class="arrow" d="M150,36 L150,60"/>
+                <rect class="process" x="70" y="65" width="160" height="25" rx="3"/>
+                <text x="150" y="81">trackDepth()</text>
+                <path class="arrow" d="M150,90 L150,115"/>
+                <polygon class="decision" points="150,120 220,155 150,190 80,155"/>
+                <text x="150" y="158">n < 8?</text>
+                <path class="arrow" d="M220,155 L260,155 L260,210"/>
+                <text class="label" x="235" y="147">Так</text>
+                <rect class="process" x="200" y="215" width="110" height="25" rx="3"/>
+                <text x="255" y="231">result = str(n%8)</text>
+                <path class="arrow" d="M80,155 L40,155 L40,205"/>
+                <text class="label" x="60" y="147">Ні</text>
+                <rect class="process" x="5" y="210" width="130" height="30" rx="3"/>
+                <text x="70" y="223" font-size="8">result = toOctal(n/8)</text>
+                <text x="70" y="235" font-size="8">+ str(n%8)</text>
+                <path class="arrow" d="M70,240 L70,280 L150,280"/>
+                <path class="arrow" d="M255,240 L255,280 L160,280"/>
+                <path class="arrow" d="M150,280 L150,310"/>
+                <rect class="process" x="70" y="315" width="160" height="25" rx="3"/>
+                <text x="150" y="331">return result</text>
+                <path class="arrow" d="M150,340 L150,360"/>
+                <ellipse class="terminal" cx="150" cy="372" rx="35" ry="12"/>
+                <text x="150" y="376">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Система з основою N -->
+        <div class="diagram-section">
+            <h2>toBaseNRecursive(n, base)</h2>
+            <svg width="300" height="420" viewBox="0 0 300 420">
+                <ellipse class="terminal" cx="150" cy="22" rx="80" ry="14"/>
+                <text x="150" y="26">toBaseNRecursive(n, base)</text>
+                <path class="arrow" d="M150,36 L150,60"/>
+                <rect class="process" x="70" y="65" width="160" height="25" rx="3"/>
+                <text x="150" y="81">trackDepth()</text>
+                <path class="arrow" d="M150,90 L150,115"/>
+                <polygon class="decision" points="150,120 230,160 150,200 70,160"/>
+                <text x="150" y="163">n < base?</text>
+                <path class="arrow" d="M230,160 L270,160 L270,220"/>
+                <text class="label" x="245" y="150">Так</text>
+                <rect class="process" x="195" y="225" width="140" height="25" rx="3"/>
+                <text x="265" y="241" font-size="8">result = digitToChar(n%base)</text>
+                <path class="arrow" d="M70,160 L30,160 L30,215"/>
+                <text class="label" x="50" y="150">Ні</text>
+                <rect class="process" x="0" y="220" width="130" height="35" rx="3"/>
+                <text x="65" y="233" font-size="8">result = toBaseN(n/base)</text>
+                <text x="65" y="248" font-size="8">+ digitToChar(n%base)</text>
+                <path class="arrow" d="M65,255 L65,300 L150,300"/>
+                <path class="arrow" d="M265,250 L265,300 L160,300"/>
+                <path class="arrow" d="M150,300 L150,330"/>
+                <rect class="process" x="70" y="335" width="160" height="25" rx="3"/>
+                <text x="150" y="351">return result</text>
+                <path class="arrow" d="M150,360 L150,385"/>
+                <ellipse class="terminal" cx="150" cy="400" rx="35" ry="12"/>
+                <text x="150" y="404">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- digitToChar -->
+        <div class="diagram-section">
+            <h2>digitToChar(digit)</h2>
+            <svg width="300" height="300" viewBox="0 0 300 300">
+                <ellipse class="terminal" cx="150" cy="22" rx="60" ry="14"/>
+                <text x="150" y="26">digitToChar(digit)</text>
+                <path class="arrow" d="M150,36 L150,65"/>
+                <polygon class="decision" points="150,70 220,105 150,140 80,105"/>
+                <text x="150" y="108">digit < 10?</text>
+                <path class="arrow" d="M220,105 L260,105 L260,160"/>
+                <text class="label" x="235" y="97">Так</text>
+                <rect class="process" x="190" y="165" width="130" height="25" rx="3"/>
+                <text x="255" y="181">return '0' + digit</text>
+                <path class="arrow" d="M80,105 L40,105 L40,160"/>
+                <text class="label" x="60" y="97">Ні</text>
+                <rect class="process" x="0" y="165" width="145" height="25" rx="3"/>
+                <text x="72" y="181">return 'A' + (digit-10)</text>
+                <path class="arrow" d="M72,190 L72,230 L150,230"/>
+                <path class="arrow" d="M255,190 L255,230 L160,230"/>
+                <path class="arrow" d="M150,230 L150,260"/>
+                <ellipse class="terminal" cx="150" cy="275" rx="35" ry="12"/>
+                <text x="150" y="279">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- Ітеративна версія -->
+        <div class="diagram-section">
+            <h2>toBaseNIterative(n, base)</h2>
+            <svg width="300" height="420" viewBox="0 0 300 420">
+                <ellipse class="terminal" cx="150" cy="22" rx="75" ry="14"/>
+                <text x="150" y="26">toBaseNIterative(n, base)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <polygon class="decision" points="150,60 210,90 150,120 90,90"/>
+                <text x="150" y="93">n = 0?</text>
+                <path class="arrow" d="M210,90 L260,90 L260,140"/>
+                <text class="label" x="230" y="82">Так</text>
+                <rect class="process" x="210" y="145" width="90" height="25" rx="3"/>
+                <text x="255" y="161">return "0"</text>
+                <path class="arrow" d="M90,90 L50,90 L50,135"/>
+                <text class="label" x="70" y="82">Ні</text>
+                <rect class="process" x="10" y="140" width="100" height="25" rx="3"/>
+                <text x="60" y="156">result = ""</text>
+                <path class="arrow" d="M60,165 L60,195"/>
+                <polygon class="decision" points="60,200 130,235 60,270 -10,235"/>
+                <text x="60" y="238">n > 0?</text>
+                <path class="arrow" d="M-10,235 L-30,235 L-30,360 L150,360"/>
+                <text class="label" x="-15" y="227">Ні</text>
+                <path class="arrow" d="M60,270 L60,295"/>
+                <text class="label" x="75" y="285">Так</text>
+                <rect class="process" x="0" y="300" width="130" height="30" rx="3"/>
+                <text x="65" y="313" font-size="8">result = digitToChar(n%base)</text>
+                <text x="65" y="325" font-size="8">+ result</text>
+                <path class="arrow" d="M130,315 L160,315 L160,235 L130,235"/>
+                <rect class="process" x="140" y="305" width="60" height="20" rx="2"/>
+                <text x="170" y="318" font-size="7">n = n/base</text>
+                <path class="arrow" d="M150,360 L150,385"/>
+                <ellipse class="terminal" cx="150" cy="400" rx="50" ry="12"/>
+                <text x="150" y="404">return result</text>
+            </svg>
+        </div>
+        
+        <!-- Глибина рекурсії -->
+        <div class="diagram-section">
+            <h2>calculateRecursionDepth(n, base)</h2>
+            <svg width="300" height="380" viewBox="0 0 300 380">
+                <ellipse class="terminal" cx="150" cy="22" rx="95" ry="14"/>
+                <text x="150" y="26">calculateRecursionDepth(n, base)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <polygon class="decision" points="150,60 210,90 150,120 90,90"/>
+                <text x="150" y="93">n = 0?</text>
+                <path class="arrow" d="M210,90 L260,90 L260,140"/>
+                <text class="label" x="230" y="82">Так</text>
+                <rect class="process" x="215" y="145" width="80" height="25" rx="3"/>
+                <text x="255" y="161">return 1</text>
+                <path class="arrow" d="M90,90 L50,90 L50,135"/>
+                <text class="label" x="70" y="82">Ні</text>
+                <rect class="process" x="10" y="140" width="100" height="25" rx="3"/>
+                <text x="60" y="156">depth = 0</text>
+                <path class="arrow" d="M60,165 L60,195"/>
+                <polygon class="decision" points="60,200 130,235 60,270 -10,235"/>
+                <text x="60" y="238">n > 0?</text>
+                <path class="arrow" d="M-10,235 L-30,235 L-30,315 L150,315"/>
+                <text class="label" x="-15" y="227">Ні</text>
+                <path class="arrow" d="M60,270 L60,290"/>
+                <text class="label" x="75" y="282">Так</text>
+                <rect class="process" x="15" y="292" width="90" height="20" rx="2"/>
+                <text x="60" y="305" font-size="8">n = n/base, depth++</text>
+                <path class="arrow" d="M105,302 L145,302 L145,235 L130,235"/>
+                <path class="arrow" d="M150,315 L150,345"/>
+                <ellipse class="terminal" cx="150" cy="360" rx="50" ry="12"/>
+                <text x="150" y="364">return depth</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- UML ACTIVITY ДІАГРАМИ -->
+    <h2 class="section-title">UML Activity діаграми</h2>
+    
+    <div class="container">
+        <!-- UML Binary -->
+        <div class="diagram-section">
+            <h2>toBinaryRecursive (UML)</h2>
+            <svg width="300" height="340" viewBox="0 0 300 340">
+                <defs><marker id="uml-arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[n]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <rect class="uml-action" x="70" y="65" width="160" height="22" rx="8"/>
+                <text x="150" y="79">trackDepth()</text>
+                <path class="uml-arrow" d="M150,87 L150,110"/>
+                <polygon class="uml-decision" points="150,115 210,150 150,185 90,150"/>
+                <text x="150" y="153" font-size="8">[n < 2]</text>
+                <path class="uml-arrow" d="M210,150 L250,150 L250,205"/>
+                <rect class="uml-action" x="195" y="210" width="100" height="22" rx="8"/>
+                <text x="245" y="224" font-size="8">result := str(n%2)</text>
+                <path class="uml-arrow" d="M90,150 L50,150 L50,205"/>
+                <rect class="uml-call" x="5" y="210" width="110" height="35" rx="8"/>
+                <text x="60" y="225" font-size="7">result := toBinary(n/2)</text>
+                <text x="60" y="238" font-size="7">+ str(n%2)</text>
+                <rect x="60" y="275" width="130" height="4" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M60,245 L60,270"/>
+                <path class="uml-arrow" d="M245,232 L245,270"/>
+                <path class="uml-arrow" d="M125,279 L125,310"/>
+                <circle class="uml-final-outer" cx="125" cy="325" r="8"/>
+                <circle class="uml-final-inner" cx="125" cy="325" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML Octal -->
+        <div class="diagram-section">
+            <h2>toOctalRecursive (UML)</h2>
+            <svg width="300" height="340" viewBox="0 0 300 340">
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[n]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <rect class="uml-action" x="70" y="65" width="160" height="22" rx="8"/>
+                <text x="150" y="79">trackDepth()</text>
+                <path class="uml-arrow" d="M150,87 L150,110"/>
+                <polygon class="uml-decision" points="150,115 210,150 150,185 90,150"/>
+                <text x="150" y="153" font-size="8">[n < 8]</text>
+                <path class="uml-arrow" d="M210,150 L250,150 L250,205"/>
+                <rect class="uml-action" x="195" y="210" width="100" height="22" rx="8"/>
+                <text x="245" y="224" font-size="8">result := str(n%8)</text>
+                <path class="uml-arrow" d="M90,150 L50,150 L50,205"/>
+                <rect class="uml-call" x="5" y="210" width="110" height="35" rx="8"/>
+                <text x="60" y="225" font-size="7">result := toOctal(n/8)</text>
+                <text x="60" y="238" font-size="7">+ str(n%8)</text>
+                <rect x="60" y="275" width="130" height="4" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M60,245 L60,270"/>
+                <path class="uml-arrow" d="M245,232 L245,270"/>
+                <path class="uml-arrow" d="M125,279 L125,310"/>
+                <circle class="uml-final-outer" cx="125" cy="325" r="8"/>
+                <circle class="uml-final-inner" cx="125" cy="325" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML BaseN -->
+        <div class="diagram-section">
+            <h2>toBaseNRecursive (UML)</h2>
+            <svg width="300" height="360" viewBox="0 0 300 360">
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[n, base]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <rect class="uml-action" x="70" y="65" width="160" height="22" rx="8"/>
+                <text x="150" y="79">trackDepth()</text>
+                <path class="uml-arrow" d="M150,87 L150,110"/>
+                <polygon class="uml-decision" points="150,115 220,155 150,195 80,155"/>
+                <text x="150" y="158" font-size="8">[n < base]</text>
+                <path class="uml-arrow" d="M220,155 L260,155 L260,215"/>
+                <rect class="uml-action" x="185" y="220" width="140" height="22" rx="8"/>
+                <text x="255" y="234" font-size="7">result := digitToChar(n%base)</text>
+                <path class="uml-arrow" d="M80,155 L40,155 L40,215"/>
+                <rect class="uml-call" x="0" y="220" width="115" height="35" rx="8"/>
+                <text x="57" y="235" font-size="6">result := toBaseN(n/base)</text>
+                <text x="57" y="248" font-size="6">+ digitToChar(n%base)</text>
+                <rect x="55" y="285" width="140" height="4" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M57,255 L57,280"/>
+                <path class="uml-arrow" d="M255,242 L255,280"/>
+                <path class="uml-arrow" d="M125,289 L125,325"/>
+                <circle class="uml-final-outer" cx="125" cy="340" r="8"/>
+                <circle class="uml-final-inner" cx="125" cy="340" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML Iterative -->
+        <div class="diagram-section">
+            <h2>toBaseNIterative (UML)</h2>
+            <svg width="300" height="320" viewBox="0 0 300 320">
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[n, base]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <polygon class="uml-decision" points="150,65 210,95 150,125 90,95"/>
+                <text x="150" y="98" font-size="8">[n = 0]</text>
+                <path class="uml-arrow" d="M210,95 L260,95 L260,130"/>
+                <rect class="uml-action" x="215" y="135" width="80" height="22" rx="8"/>
+                <text x="255" y="149">return "0"</text>
+                <path class="uml-arrow" d="M90,95 L50,95 L50,125"/>
+                <rect class="uml-action" x="10" y="130" width="80" height="22" rx="8"/>
+                <text x="50" y="144">result := ""</text>
+                <path class="uml-arrow" d="M50,152 L50,175"/>
+                <rect x="10" y="180" width="200" height="70" rx="6" fill="none" stroke="#000" stroke-dasharray="3,2"/>
+                <text x="30" y="195" font-size="7" font-weight="bold">«loop» [n > 0]</text>
+                <rect class="uml-action" x="20" y="205" width="180" height="35" rx="8"/>
+                <text x="110" y="220" font-size="7">result := digitToChar(n%base) + result</text>
+                <text x="110" y="232" font-size="7">n := n / base</text>
+                <path class="uml-arrow" d="M110,250 L110,270"/>
+                <rect class="uml-action" x="50" y="275" width="120" height="22" rx="8"/>
+                <text x="110" y="289">return result</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Трасування рекурсії -->
+    <h2 class="section-title">Трасування рекурсії</h2>
+    
+    <div class="formula-box">
+        <h3>Приклад: toBinaryRecursive(10)</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem; line-height: 1.8;">
+            <table class="results-table">
+                <tr><th>Виклик</th><th>n</th><th>n < 2?</th><th>Дія</th><th>Результат</th><th>Глибина</th></tr>
+                <tr><td>1</td><td>10</td><td>Ні</td><td>toBinary(5) + "0"</td><td>—</td><td>1</td></tr>
+                <tr><td>2</td><td>5</td><td>Ні</td><td>toBinary(2) + "1"</td><td>—</td><td>2</td></tr>
+                <tr><td>3</td><td>2</td><td>Ні</td><td>toBinary(1) + "0"</td><td>—</td><td>3</td></tr>
+                <tr><td>4</td><td>1</td><td>Так</td><td>return "1"</td><td>"1"</td><td>4 (max)</td></tr>
+                <tr><td>↩3</td><td>2</td><td>—</td><td>return "1" + "0"</td><td>"10"</td><td>3</td></tr>
+                <tr><td>↩2</td><td>5</td><td>—</td><td>return "10" + "1"</td><td>"101"</td><td>2</td></tr>
+                <tr><td>↩1</td><td>10</td><td>—</td><td>return "101" + "0"</td><td>"1010"</td><td>1</td></tr>
+            </table>
+            <br>
+            <b>Результат:</b> 10₁₀ = 1010₂ <br>
+            <b>Глибина рекурсії:</b> 4 (кількість двійкових цифр)
+        </div>
+    </div>
+    
+    <div class="formula-box">
+        <h3>Приклад: toOctalRecursive(100)</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem; line-height: 1.8;">
+            <table class="results-table">
+                <tr><th>Виклик</th><th>n</th><th>n < 8?</th><th>Дія</th><th>Результат</th><th>Глибина</th></tr>
+                <tr><td>1</td><td>100</td><td>Ні</td><td>toOctal(12) + "4"</td><td>—</td><td>1</td></tr>
+                <tr><td>2</td><td>12</td><td>Ні</td><td>toOctal(1) + "4"</td><td>—</td><td>2</td></tr>
+                <tr><td>3</td><td>1</td><td>Так</td><td>return "1"</td><td>"1"</td><td>3 (max)</td></tr>
+                <tr><td>↩2</td><td>12</td><td>—</td><td>return "1" + "4"</td><td>"14"</td><td>2</td></tr>
+                <tr><td>↩1</td><td>100</td><td>—</td><td>return "14" + "4"</td><td>"144"</td><td>1</td></tr>
+            </table>
+            <br>
+            <b>Результат:</b> 100₁₀ = 144₈ <br>
+            <b>Глибина рекурсії:</b> 3 (кількість вісімкових цифр)
+        </div>
+    </div>
+    
+    <!-- Results -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Результати виконання програми:</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem;">
+            <table class="results-table">
+                <tr>
+                    <th>Число (₁₀)</th>
+                    <th>Двійкова (₂)</th>
+                    <th>Глибина</th>
+                    <th>Вісімкова (₈)</th>
+                    <th>Глибина</th>
+                    <th>Шістнадцяткова (₁₆)</th>
+                    <th>Глибина</th>
+                </tr>
+                <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                <tr><td>10</td><td>1010</td><td>4</td><td>12</td><td>2</td><td>A</td><td>1</td></tr>
+                <tr><td>100</td><td>1100100</td><td>7</td><td>144</td><td>3</td><td>64</td><td>2</td></tr>
+                <tr><td>255</td><td>11111111</td><td>8</td><td>377</td><td>3</td><td>FF</td><td>2</td></tr>
+                <tr><td>1000</td><td>1111101000</td><td>10</td><td>1750</td><td>4</td><td>3E8</td><td>3</td></tr>
+                <tr><td>1024</td><td>10000000000</td><td>11</td><td>2000</td><td>4</td><td>400</td><td>3</td></tr>
+                <tr><td>65535</td><td>1111111111111111</td><td>16</td><td>177777</td><td>6</td><td>FFFF</td><td>4</td></tr>
+            </table>
+            <br>
+            <b>Формула глибини рекурсії:</b> depth = ⌊log<sub>base</sub>(n)⌋ + 1 = кількість цифр у представленні числа<br><br>
+            ✅ Всі тести пройдені успішно!
+        </div>
+    </div>
+</body>
+</html>
+

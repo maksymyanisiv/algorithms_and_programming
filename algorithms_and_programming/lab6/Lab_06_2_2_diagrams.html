@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 6.2 (Рекурсивний спосіб)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #000; padding: 40px 20px; }
+        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; }
+        .section-title { text-align: center; font-size: 1.8rem; margin: 50px 0 30px; border-bottom: 3px solid #000; padding-bottom: 10px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .formula-box { background: #f9f9f9; border: 2px solid #000; border-radius: 8px; padding: 25px; max-width: 900px; margin: 0 auto 50px; }
+        .formula-box h3 { margin-bottom: 15px; font-size: 1.3rem; }
+        .formula { font-family: 'Cambria Math', serif; font-size: 1.05rem; line-height: 2; padding-left: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1900px; margin: 0 auto; }
+        .diagram-section { background: #fff; border: 2px solid #000; border-radius: 8px; padding: 15px; flex: 1; min-width: 320px; max-width: 420px; }
+        .diagram-section h2 { text-align: center; font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+        svg { display: block; margin: 0 auto; }
+        .terminal, .process, .decision, .io { fill: #fff; stroke: #000; stroke-width: 2; }
+        .arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+        .uml-initial { fill: #000; }
+        .uml-final-outer { fill: none; stroke: #000; stroke-width: 2; }
+        .uml-final-inner { fill: #000; }
+        .uml-action, .uml-call, .uml-decision { fill: #fff; stroke: #000; stroke-width: 2; }
+        .uml-call { fill: #f0f0f0; }
+        .uml-arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#uml-arrowhead); }
+        text { font-family: 'Segoe UI', sans-serif; fill: #000; font-size: 9px; text-anchor: middle; }
+        .label { font-size: 8px; font-weight: bold; }
+        .struct-box { background: #f0f0f0; border: 2px solid #000; border-radius: 8px; padding: 20px; max-width: 300px; margin: 0 auto 30px; }
+        .struct-box h3 { text-align: center; margin-bottom: 15px; }
+        .func-item { background: #fff; border: 1px solid #000; padding: 8px 15px; margin: 5px 0; text-align: center; }
+        .trace-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .trace-table th, .trace-table td { border: 1px solid #000; padding: 6px 10px; text-align: center; font-size: 0.85rem; }
+        .trace-table th { background: #e0e0e0; }
+        @media (max-width: 1200px) { .diagram-section { min-width: 100%; max-width: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №6.2</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим — РЕКУРСИВНИЙ СПОСІБ</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            <b>Масив:</b> a[n] цілих чисел<br>
+            <b>Завдання:</b> Написати функцію, яка міняє місцями перший елемент<br>
+            із найменшим парним елементом масиву.<br><br>
+            <b>Рекурсивні функції:</b><br>
+            • fillArray() — заповнення масиву (рекурсивно)<br>
+            • printArray() — виведення масиву (рекурсивно)<br>
+            • findMinEvenIndexRec() — рекурсивний пошук мін. парного<br>
+            • swapFirstWithMinEven() — обмін першого з найменшим парним
+        </div>
+    </div>
+    
+    <!-- Структурна схема -->
+    <div class="struct-box">
+        <h3>Структурна схема програми:</h3>
+        <div class="func-item">swapFirstWithMinEven()</div>
+        <div class="func-item">swapElements()</div>
+        <div class="func-item">findMinEvenIndexRec()</div>
+        <div class="func-item">printArray()</div>
+        <div class="func-item">fillArray()</div>
+        <div class="func-item" style="border-width: 2px;">main()</div>
+    </div>
+    
+    <!-- БЛОК-СХЕМИ -->
+    <h2 class="section-title">Блок-схеми (Рекурсивні)</h2>
+    
+    <div class="container">
+        <!-- fillArray recursive -->
+        <div class="diagram-section">
+            <h2>fillArray(arr, size, min, max, idx)</h2>
+            <svg width="320" height="320" viewBox="0 0 320 320">
+                <defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <ellipse class="terminal" cx="160" cy="22" rx="100" ry="14"/>
+                <text x="160" y="26">fillArray(arr, size, min, max, idx)</text>
+                <path class="arrow" d="M160,36 L160,65"/>
+                <polygon class="decision" points="160,70 240,110 160,150 80,110"/>
+                <text x="160" y="113">idx ≥ size?</text>
+                <path class="arrow" d="M240,110 L280,110 L280,165"/>
+                <text class="label" x="255" y="102">Так</text>
+                <rect class="process" x="230" y="170" width="80" height="25" rx="3"/>
+                <text x="270" y="186">return</text>
+                <path class="arrow" d="M80,110 L40,110 L40,155"/>
+                <text class="label" x="62" y="102">Ні</text>
+                <rect class="process" x="0" y="160" width="160" height="25" rx="3"/>
+                <text x="80" y="176" font-size="8">arr[idx] = min + rand()%(...)</text>
+                <path class="arrow" d="M80,185 L80,220"/>
+                <rect class="process" x="10" y="225" width="180" height="30" rx="3"/>
+                <text x="100" y="238" font-size="8">fillArray(arr, size, min,</text>
+                <text x="100" y="250" font-size="8">max, idx + 1)</text>
+                <path class="arrow" d="M100,255 L100,280 L160,280"/>
+                <path class="arrow" d="M270,195 L270,280 L170,280"/>
+                <path class="arrow" d="M160,280 L160,305"/>
+                <ellipse class="terminal" cx="160" cy="312" rx="30" ry="10"/>
+                <text x="160" y="315">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- printArray recursive -->
+        <div class="diagram-section">
+            <h2>printArray(arr, size, idx)</h2>
+            <svg width="300" height="320" viewBox="0 0 300 320">
+                <ellipse class="terminal" cx="150" cy="22" rx="80" ry="14"/>
+                <text x="150" y="26">printArray(arr, size, idx)</text>
+                <path class="arrow" d="M150,36 L150,65"/>
+                <polygon class="decision" points="150,70 230,110 150,150 70,110"/>
+                <text x="150" y="113">idx ≥ size?</text>
+                <path class="arrow" d="M230,110 L265,110 L265,165"/>
+                <text class="label" x="243" y="102">Так</text>
+                <polygon class="io" points="220,170 290,170 280,195 230,195"/>
+                <text x="255" y="186">endl</text>
+                <path class="arrow" d="M255,195 L255,265 L160,265"/>
+                <path class="arrow" d="M70,110 L30,110 L30,160"/>
+                <text class="label" x="52" y="102">Ні</text>
+                <polygon class="io" points="0,165 85,165 75,190 10,190"/>
+                <text x="42" y="181">arr[idx]</text>
+                <path class="arrow" d="M42,190 L42,220"/>
+                <rect class="process" x="0" y="225" width="120" height="30" rx="3"/>
+                <text x="60" y="238" font-size="8">printArray(arr, size,</text>
+                <text x="60" y="250" font-size="8">idx + 1)</text>
+                <path class="arrow" d="M60,255 L60,265 L150,265"/>
+                <path class="arrow" d="M150,265 L150,295"/>
+                <ellipse class="terminal" cx="150" cy="307" rx="30" ry="10"/>
+                <text x="150" y="310">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- findMinEvenIndexRec -->
+        <div class="diagram-section">
+            <h2>findMinEvenIndexRec(arr, size, idx, minIdx, minVal)</h2>
+            <svg width="380" height="480" viewBox="0 0 380 480">
+                <ellipse class="terminal" cx="190" cy="22" rx="130" ry="14"/>
+                <text x="190" y="26">findMinEvenIndexRec(arr, size, idx, minIdx, minVal)</text>
+                <path class="arrow" d="M190,36 L190,65"/>
+                <polygon class="decision" points="190,70 270,110 190,150 110,110"/>
+                <text x="190" y="113">idx ≥ size?</text>
+                <path class="arrow" d="M270,110 L320,110 L320,165"/>
+                <text class="label" x="290" y="102">Так</text>
+                <rect class="process" x="260" y="170" width="110" height="25" rx="3"/>
+                <text x="315" y="186">return minIdx</text>
+                <path class="arrow" d="M110,110 L60,110 L60,155"/>
+                <text class="label" x="88" y="102">Ні</text>
+                <polygon class="decision" points="100,160 170,195 100,230 30,195"/>
+                <text x="100" y="198">arr[idx] % 2</text>
+                <text x="100" y="208">== 0?</text>
+                <path class="arrow" d="M100,230 L100,360"/>
+                <text class="label" x="115" y="240">Ні</text>
+                <path class="arrow" d="M30,195 L0,195 L0,245"/>
+                <text class="label" x="18" y="187">Так</text>
+                <polygon class="decision" points="50,250 120,285 50,320 -20,285"/>
+                <text x="50" y="285" font-size="7">arr[idx]<minVal?</text>
+                <path class="arrow" d="M-20,285 L-45,285 L-45,335"/>
+                <text class="label" x="-30" y="277">Так</text>
+                <rect class="process" x="-80" y="340" width="100" height="30" rx="2"/>
+                <text x="-30" y="353" font-size="7">newMinVal = arr[idx]</text>
+                <text x="-30" y="365" font-size="7">newMinIdx = idx</text>
+                <path class="arrow" d="M120,285 L145,285 L145,360 L110,360"/>
+                <text class="label" x="128" y="277">Ні</text>
+                <path class="arrow" d="M-30,370 L-30,390 L100,390"/>
+                <path class="arrow" d="M100,390 L100,410"/>
+                <rect class="process" x="20" y="415" width="200" height="30" rx="3"/>
+                <text x="120" y="428" font-size="7">return findMinEvenIndexRec(arr, size,</text>
+                <text x="120" y="440" font-size="7">idx+1, newMinIdx, newMinVal)</text>
+                <path class="arrow" d="M120,445 L120,465 L190,465"/>
+                <path class="arrow" d="M315,195 L315,465 L200,465"/>
+                <ellipse class="terminal" cx="190" cy="475" rx="30" ry="10"/>
+                <text x="190" y="478">Кінець</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- UML Activity diagrams -->
+    <h2 class="section-title">UML Activity діаграми</h2>
+    
+    <div class="container">
+        <!-- UML fillArray -->
+        <div class="diagram-section">
+            <h2>fillArray (UML)</h2>
+            <svg width="300" height="300" viewBox="0 0 300 300">
+                <defs><marker id="uml-arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <circle class="uml-initial" cx="150" cy="18" r="7"/>
+                <text x="150" y="38" font-size="7">[arr, size, min, max, idx]</text>
+                <path class="uml-arrow" d="M150,40 L150,60"/>
+                <polygon class="uml-decision" points="150,65 220,100 150,135 80,100"/>
+                <text x="150" y="103" font-size="8">[idx ≥ size]</text>
+                <path class="uml-arrow" d="M220,100 L260,100 L260,230"/>
+                <path class="uml-arrow" d="M80,100 L40,100 L40,145"/>
+                <rect class="uml-action" x="0" y="150" width="130" height="22" rx="8"/>
+                <text x="65" y="164" font-size="7">arr[idx] := random(min,max)</text>
+                <path class="uml-arrow" d="M65,172 L65,200"/>
+                <rect class="uml-call" x="5" y="205" width="140" height="22" rx="8"/>
+                <text x="75" y="219" font-size="7">fillArray(arr, size, min, max, idx+1)</text>
+                <rect x="70" y="245" width="130" height="4" rx="2" fill="#000"/>
+                <path class="uml-arrow" d="M75,227 L75,240"/>
+                <path class="uml-arrow" d="M260,230 L260,247 L200,247"/>
+                <path class="uml-arrow" d="M135,249 L135,275"/>
+                <circle class="uml-final-outer" cx="135" cy="285" r="8"/>
+                <circle class="uml-final-inner" cx="135" cy="285" r="4"/>
+            </svg>
+        </div>
+        
+        <!-- UML findMinEvenIndex -->
+        <div class="diagram-section">
+            <h2>findMinEvenIndexRec (UML)</h2>
+            <svg width="320" height="380" viewBox="0 0 320 380">
+                <circle class="uml-initial" cx="160" cy="18" r="7"/>
+                <text x="160" y="38" font-size="6">[arr, size, idx, minIdx, minVal]</text>
+                <path class="uml-arrow" d="M160,40 L160,60"/>
+                <polygon class="uml-decision" points="160,65 230,100 160,135 90,100"/>
+                <text x="160" y="103" font-size="8">[idx ≥ size]</text>
+                <path class="uml-arrow" d="M230,100 L275,100 L275,155"/>
+                <rect class="uml-action" x="225" y="160" width="90" height="22" rx="8"/>
+                <text x="270" y="174">return minIdx</text>
+                <path class="uml-arrow" d="M90,100 L45,100 L45,140"/>
+                <polygon class="uml-decision" points="75,145 135,175 75,205 15,175"/>
+                <text x="75" y="178" font-size="7">even?</text>
+                <path class="uml-arrow" d="M15,175 L-10,175 L-10,215"/>
+                <polygon class="uml-decision" points="25,220 85,250 25,280 -35,250"/>
+                <text x="25" y="253" font-size="6">< minVal?</text>
+                <path class="uml-arrow" d="M-35,250 L-55,250 L-55,290"/>
+                <rect class="uml-action" x="-85" y="295" width="80" height="30" rx="6"/>
+                <text x="-45" y="308" font-size="6">newMinIdx := idx</text>
+                <text x="-45" y="320" font-size="6">newMinVal := arr[idx]</text>
+                <path class="uml-arrow" d="M135,175 L160,175 L160,310 L100,310"/>
+                <path class="uml-arrow" d="M85,250 L110,250 L110,310 L100,310"/>
+                <path class="uml-arrow" d="M-45,325 L-45,340 L90,340"/>
+                <rect class="uml-call" x="15" y="345" width="180" height="22" rx="8"/>
+                <text x="105" y="359" font-size="6">return findMinEvenIndexRec(idx+1, ...)</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Трасування рекурсії -->
+    <h2 class="section-title">Трасування рекурсії</h2>
+    
+    <div class="formula-box">
+        <h3>Приклад: findMinEvenIndex([5, 4, 2, 8, 6], 5)</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem;">
+            <table class="trace-table">
+                <tr><th>Виклик</th><th>idx</th><th>arr[idx]</th><th>Парний?</th><th>< minVal?</th><th>minIdx</th><th>minVal</th></tr>
+                <tr><td>1</td><td>0</td><td>5</td><td>❌</td><td>—</td><td>-1</td><td>INT_MAX</td></tr>
+                <tr><td>2</td><td>1</td><td>4</td><td>✅</td><td>✅ 4 < MAX</td><td>1</td><td>4</td></tr>
+                <tr><td>3</td><td>2</td><td>2</td><td>✅</td><td>✅ 2 < 4</td><td>2</td><td>2</td></tr>
+                <tr><td>4</td><td>3</td><td>8</td><td>✅</td><td>❌ 8 ≥ 2</td><td>2</td><td>2</td></tr>
+                <tr><td>5</td><td>4</td><td>6</td><td>✅</td><td>❌ 6 ≥ 2</td><td>2</td><td>2</td></tr>
+                <tr><td>6</td><td>5</td><td>—</td><td>—</td><td>—</td><td colspan="2">return 2</td></tr>
+            </table>
+            <br>
+            <b>Результат:</b> minEvenIndex = 2 (значення 2 — найменший парний)<br>
+            <b>Після swap:</b> {5, 4, 2, 8, 6} → {<b>2</b>, 4, <b>5</b>, 8, 6}
+        </div>
+    </div>
+    
+    <div class="formula-box">
+        <h3>Приклад: findMinEvenIndex([10, -4, 2, -6, 8], 5)</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem;">
+            <table class="trace-table">
+                <tr><th>Виклик</th><th>idx</th><th>arr[idx]</th><th>Парний?</th><th>< minVal?</th><th>minIdx</th><th>minVal</th></tr>
+                <tr><td>1</td><td>0</td><td>10</td><td>✅</td><td>✅ 10 < MAX</td><td>0</td><td>10</td></tr>
+                <tr><td>2</td><td>1</td><td>-4</td><td>✅</td><td>✅ -4 < 10</td><td>1</td><td>-4</td></tr>
+                <tr><td>3</td><td>2</td><td>2</td><td>✅</td><td>❌ 2 ≥ -4</td><td>1</td><td>-4</td></tr>
+                <tr><td>4</td><td>3</td><td>-6</td><td>✅</td><td>✅ -6 < -4</td><td>3</td><td>-6</td></tr>
+                <tr><td>5</td><td>4</td><td>8</td><td>✅</td><td>❌ 8 ≥ -6</td><td>3</td><td>-6</td></tr>
+                <tr><td>6</td><td>5</td><td>—</td><td>—</td><td>—</td><td colspan="2">return 3</td></tr>
+            </table>
+            <br>
+            <b>Результат:</b> minEvenIndex = 3 (значення -6 — найменший парний)<br>
+            <b>Після swap:</b> {10, -4, 2, -6, 8} → {<b>-6</b>, -4, 2, <b>10</b>, 8}
+        </div>
+    </div>
+    
+    <!-- Results -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Приклад результату програми:</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem;">
+            <b>Original array:</b><br>
+            -7   43   25   28   11    0  -39  -34   13  -50  -13    3  -34<br><br>
+            <b>Minimum even element:</b> -50 at index 9<br>
+            <b>First element:</b> -7 at index 0<br><br>
+            <b>After swapping first with min even:</b><br>
+            -50   43   25   28   11    0  -39  -34   13   -7  -13    3  -34<br><br>
+            ✅ Рекурсивна версія дає той самий результат, що й ітераційна!
+        </div>
+    </div>
+</body>
+</html>
+

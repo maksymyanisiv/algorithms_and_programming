@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Використання хмарних сервісів</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .slide {
+            width: 100%;
+            min-height: 100vh;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            font-size: 14px;
+            opacity: 0.5;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Slide 1 - Title */
+        .slide-1 {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            text-align: center;
+        }
+
+        .slide-1 .cloud-icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .slide-1 h1 {
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #4285F4, #34A853, #FBBC04);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-1 .subtitle {
+            font-size: 28px;
+            color: #a8b2d1;
+            margin-bottom: 60px;
+        }
+
+        .slide-1 .author-info {
+            font-size: 18px;
+            color: #8892b0;
+        }
+
+        /* Slide 2-7 Common */
+        .slide h2 {
+            font-size: 42px;
+            margin-bottom: 50px;
+            color: #4285F4;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .slide h2 .icon {
+            font-size: 50px;
+        }
+
+        .bullet-list {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            font-size: 24px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #4285F4;
+            border-radius: 0 12px 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .bullet-list li:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .bullet-list li .emoji {
+            font-size: 32px;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .bullet-list li .text strong {
+            color: #4285F4;
+        }
+
+        /* Slide 2 */
+        .slide-2 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        /* Slide 3 - Green theme for advantages */
+        .slide-3 {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+        }
+
+        .slide-3 h2 {
+            color: #34A853;
+        }
+
+        .slide-3 .bullet-list li {
+            border-left-color: #34A853;
+        }
+
+        /* Slide 4 - Education */
+        .slide-4 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+        }
+
+        .slide-4 h2 {
+            color: #9B59B6;
+        }
+
+        .slide-4 .bullet-list li {
+            border-left-color: #9B59B6;
+        }
+
+        /* Slide 5 - Risks - Red theme */
+        .slide-5 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2e1a1a 100%);
+        }
+
+        .slide-5 h2 {
+            color: #EA4335;
+        }
+
+        .slide-5 .bullet-list li {
+            border-left-color: #EA4335;
+        }
+
+        /* Slide 6 - Chart */
+        .slide-6 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 300px;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .bar {
+            width: 40px;
+            background: linear-gradient(180deg, #4285F4 0%, #34A853 100%);
+            border-radius: 8px 8px 0 0;
+            transition: height 0.5s ease;
+        }
+
+        .bar-label {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #8892b0;
+        }
+
+        .bar-value {
+            font-size: 10px;
+            color: #4285F4;
+            margin-bottom: 5px;
+        }
+
+        /* Slide 7 - Links */
+        .slide-7 {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        }
+
+        .link-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .link-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .link-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(66, 133, 244, 0.2);
+        }
+
+        .link-card .card-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .link-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #4285F4;
+        }
+
+        .link-card p {
+            font-size: 14px;
+            color: #8892b0;
+            margin-bottom: 20px;
+        }
+
+        .link-card a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(90deg, #4285F4, #34A853);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .link-card a:hover {
+            transform: scale(1.05);
+        }
+
+        /* Print styles for copying */
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+
+        /* Divider between slides */
+        .slide-divider {
+            height: 4px;
+            background: linear-gradient(90deg, #4285F4, #34A853, #FBBC04, #EA4335);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide slide-1">
+        <div class="content">
+            <div class="cloud-icon">☁️</div>
+            <h1>Використання хмарних сервісів</h1>
+            <p class="subtitle">можливості, переваги та ризики</p>
+            <div class="author-info">
+                <p>👤 Автор: Студент</p>
+                <p>📅 Січень 2026</p>
+            </div>
+        </div>
+        <div class="slide-number">1 / 7</div>
+    </div>
+
+    <div class="slide-divider"></div>
+
+    <!-- SLIDE 2: What are cloud services -->
+    <div class="slide slide-2">
+        <div class="content">
+            <h2><span class="icon">☁️</span> Що таке хмарні сервіси?</h2>
+            <ul class="bullet-list">
+                <li>
+                    <span class="emoji">🌐</span>
+                    <span class="text"><strong>Доступ через інтернет</strong> — працюйте з файлами з будь-якого пристрою</span>
+                </li>
+                <li>
+                    <span class="emoji">💾</span>
+                    <span class="text"><strong>Віддалене зберігання</strong> — дані на серверах, не на вашому комп'ютері</span>
+                </li>
+                <li>
+                    <span class="emoji">⚡</span>
+                    <span class="text"><strong>Обчислення за запитом</strong> — потужні сервери виконують складні задачі</span>
+                </li>
+                <li>
+                    <span class="emoji">🔄</span>
+                    <span class="text"><strong>Синхронізація</strong> — автоматичне оновлення на всіх пристроях</span>
+                </li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 7</div>
+    </div>
+
+    <div class="slide-divider"></div>
+
+    <!-- SLIDE 3: Advantages -->
+    <div class="slide slide-3">
+        <div class="content">
+            <h2><span class="icon">✅</span> Переваги хмарних сервісів</h2>
+            <ul class="bullet-list">
+                <li>
+                    <span class="emoji">🕐</span>
+                    <span class="text"><strong>Доступність 24/7</strong> — працюйте будь-коли та будь-де</span>
+                </li>
+                <li>
+                    <span class="emoji">👥</span>
+                    <span class="text"><strong>Спільна робота</strong> — редагуйте документи разом у реальному часі</span>
+                </li>
+                <li>
+                    <span class="emoji">🛡️</span>
+                    <span class="text"><strong>Безпека даних</strong> — автоматичне резервне копіювання</span>
+                </li>
+                <li>
+                    <span class="emoji">📈</span>
+                    <span class="text"><strong>Масштабованість</strong> — легко збільшити обсяг пам'яті</span>
+                </li>
+                <li>
+                    <span class="emoji">💰</span>
+                    <span class="text"><strong>Економія</strong> — не потрібно купувати сервери</span>
+                </li>
+            </ul>
+        </div>
+        <div class="slide-number">3 / 7</div>
+    </div>
+
+    <div class="slide-divider"></div>
+
+    <!-- SLIDE 4: Education -->
+    <div class="slide slide-4">
+        <div class="content">
+            <h2><span class="icon">🎓</span> Хмарні сервіси в освіті</h2>
+            <ul class="bullet-list">
+                <li>
+                    <span class="emoji">📝</span>
+                    <span class="text"><strong>Google Docs</strong> — спільні документи для групових проєктів</span>
+                </li>
+                <li>
+                    <span class="emoji">📋</span>
+                    <span class="text"><strong>Google Forms</strong> — онлайн-тестування та опитування</span>
+                </li>
+                <li>
+                    <span class="emoji">🏫</span>
+                    <span class="text"><strong>Google Classroom</strong> — віртуальні класи та завдання</span>
+                </li>
+                <li>
+                    <span class="emoji">💬</span>
+                    <span class="text"><strong>Microsoft Teams</strong> — відеоконференції та командна робота</span>
+                </li>
+            </ul>
+        </div>
+        <div class="slide-number">4 / 7</div>
+    </div>
+
+    <div class="slide-divider"></div>
+
+    <!-- SLIDE 5: Risks -->
+    <div class="slide slide-5">
+        <div class="content">
+            <h2><span class="icon">⚠️</span> Ризики та загрози</h2>
+            <ul class="bullet-list">
+                <li>
+                    <span class="emoji">📡</span>
+                    <span class="text"><strong>Залежність від інтернету</strong> — без з'єднання немає доступу</span>
+                </li>
+                <li>
+                    <span class="emoji">🔓</span>
+                    <span class="text"><strong>Конфіденційність</strong> — ризик витоку особистих даних</span>
+                </li>
+                <li>
+                    <span class="emoji">💥</span>
+                    <span class="text"><strong>Технічні збої</strong> — можлива втрата даних при аваріях</span>
+                </li>
+                <li>
+                    <span class="emoji">🏢</span>
+                    <span class="text"><strong>Залежність від провайдера</strong> — закриття сервісу = втрата доступу</span>
+                </li>
+            </ul>
+        </div>
+        <div class="slide-number">5 / 7</div>
+    </div>
+
+    <div class="slide-divider"></div>
+
+    <!-- SLIDE 6: Chart -->
+    <div class="slide slide-6">
+        <div class="content">
+            <h2><span class="icon">📊</span> Динаміка використання 2010–2024</h2>
+            <div class="chart-container">
+                <div class="chart-bars">
+                    <div class="bar-item">
+                        <div class="bar-value">45M</div>
+                        <div class="bar" style="height: 15px;"></div>
+                        <div class="bar-label">2010</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">68M</div>
+                        <div class="bar" style="height: 22px;"></div>
+                        <div class="bar-label">2011</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">172M</div>
+                        <div class="bar" style="height: 35px;"></div>
+                        <div class="bar-label">2013</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">456M</div>
+                        <div class="bar" style="height: 55px;"></div>
+                        <div class="bar-label">2015</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">1B</div>
+                        <div class="bar" style="height: 85px;"></div>
+                        <div class="bar-label">2017</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">2B</div>
+                        <div class="bar" style="height: 120px;"></div>
+                        <div class="bar-label">2019</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">3.2B</div>
+                        <div class="bar" style="height: 160px;"></div>
+                        <div class="bar-label">2020</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">5.3B</div>
+                        <div class="bar" style="height: 210px;"></div>
+                        <div class="bar-label">2022</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">7.1B</div>
+                        <div class="bar" style="height: 260px;"></div>
+                        <div class="bar-label">2024</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value">8.2B</div>
+                        <div class="bar" style="height: 300px;"></div>
+                        <div class="bar-label">2025</div>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 20px; color: #8892b0;">
+                    📈 Зростання з 45 млн до 8.2 млрд користувачів за 15 років
+                </p>
+            </div>
+        </div>
+        <div class="slide-number">6 / 7</div>
+    </div>
+
+    <div class="slide-divider"></div>
+
+    <!-- SLIDE 7: Links -->
+    <div class="slide slide-7">
+        <div class="content">
+            <h2><span class="icon">🔗</span> Дізнайтеся більше</h2>
+            <div class="link-cards">
+                <div class="link-card">
+                    <div class="card-icon">🎬</div>
+                    <h3>Відео-урок</h3>
+                    <p>Що таке хмарні технології? Пояснення простими словами</p>
+                    <a href="https://www.youtube.com/watch?v=dH0yz-Osy54" target="_blank">Дивитися →</a>
+                </div>
+                <div class="link-card">
+                    <div class="card-icon">📚</div>
+                    <h3>Документація AWS</h3>
+                    <p>Офіційний посібник з хмарних обчислень від Amazon</p>
+                    <a href="https://aws.amazon.com/what-is-cloud-computing/" target="_blank">Читати →</a>
+                </div>
+                <div class="link-card">
+                    <div class="card-icon">🎓</div>
+                    <h3>Курс Coursera</h3>
+                    <p>Безкоштовний курс Introduction to Cloud Computing</p>
+                    <a href="https://www.coursera.org/learn/introduction-to-cloud" target="_blank">Навчатись →</a>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">7 / 7</div>
+    </div>
+
+</body>
+</html>
+
+
+
+

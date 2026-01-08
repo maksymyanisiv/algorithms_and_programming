@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варіант 31 - Лабораторна робота 6.2 (Ітераційний спосіб)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; color: #000; padding: 40px 20px; }
+        h1 { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 40px; }
+        .section-title { text-align: center; font-size: 1.8rem; margin: 50px 0 30px; border-bottom: 3px solid #000; padding-bottom: 10px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .formula-box { background: #f9f9f9; border: 2px solid #000; border-radius: 8px; padding: 25px; max-width: 900px; margin: 0 auto 50px; }
+        .formula-box h3 { margin-bottom: 15px; font-size: 1.3rem; }
+        .formula { font-family: 'Cambria Math', serif; font-size: 1.05rem; line-height: 2; padding-left: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1900px; margin: 0 auto; }
+        .diagram-section { background: #fff; border: 2px solid #000; border-radius: 8px; padding: 15px; flex: 1; min-width: 320px; max-width: 420px; }
+        .diagram-section h2 { text-align: center; font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+        svg { display: block; margin: 0 auto; }
+        .terminal, .process, .decision, .io { fill: #fff; stroke: #000; stroke-width: 2; }
+        .arrow { stroke: #000; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+        text { font-family: 'Segoe UI', sans-serif; fill: #000; font-size: 9px; text-anchor: middle; }
+        .label { font-size: 8px; font-weight: bold; }
+        .struct-box { background: #f0f0f0; border: 2px solid #000; border-radius: 8px; padding: 20px; max-width: 300px; margin: 0 auto 30px; }
+        .struct-box h3 { text-align: center; margin-bottom: 15px; }
+        .func-item { background: #fff; border: 1px solid #000; padding: 8px 15px; margin: 5px 0; text-align: center; }
+        @media (max-width: 1200px) { .diagram-section { min-width: 100%; max-width: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота №6.2</h1>
+    <p class="subtitle">Варіант 31 — Янісів Максим — ІТЕРАЦІЙНИЙ СПОСІБ</p>
+    
+    <div class="formula-box">
+        <h3>Умова задачі:</h3>
+        <div class="formula">
+            <b>Масив:</b> a[n] цілих чисел<br>
+            <b>Завдання:</b> Написати функцію, яка міняє місцями перший елемент<br>
+            із найменшим парним елементом масиву.<br><br>
+            <b>Функції:</b><br>
+            • fillArray() — заповнення масиву<br>
+            • printArray() — виведення масиву<br>
+            • findMinEvenIndex() — пошук індексу найменшого парного<br>
+            • swapElements() — обмін двох елементів<br>
+            • swapFirstWithMinEven() — обмін першого з найменшим парним
+        </div>
+    </div>
+    
+    <!-- Структурна схема -->
+    <div class="struct-box">
+        <h3>Структурна схема програми:</h3>
+        <div class="func-item">swapFirstWithMinEven()</div>
+        <div class="func-item">swapElements()</div>
+        <div class="func-item">findMinEvenIndex()</div>
+        <div class="func-item">printArray()</div>
+        <div class="func-item">fillArray()</div>
+        <div class="func-item" style="border-width: 2px;">main()</div>
+    </div>
+    
+    <!-- БЛОК-СХЕМИ -->
+    <h2 class="section-title">Блок-схеми (Ітераційні)</h2>
+    
+    <div class="container">
+        <!-- fillArray -->
+        <div class="diagram-section">
+            <h2>fillArray(arr, size, min, max)</h2>
+            <svg width="320" height="300" viewBox="0 0 320 300">
+                <defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#000"/></marker></defs>
+                <ellipse class="terminal" cx="160" cy="22" rx="90" ry="14"/>
+                <text x="160" y="26">fillArray(arr, size, min, max)</text>
+                <path class="arrow" d="M160,36 L160,55"/>
+                <rect class="process" x="100" y="60" width="120" height="25" rx="3"/>
+                <text x="160" y="76">i = 0</text>
+                <path class="arrow" d="M160,85 L160,110"/>
+                <polygon class="decision" points="160,115 230,150 160,185 90,150"/>
+                <text x="160" y="153">i < size?</text>
+                <path class="arrow" d="M230,150 L280,150 L280,240 L160,240"/>
+                <text class="label" x="250" y="142">Ні</text>
+                <path class="arrow" d="M160,185 L160,205"/>
+                <text class="label" x="175" y="195">Так</text>
+                <rect class="process" x="55" y="205" width="210" height="25" rx="3"/>
+                <text x="160" y="221" font-size="8">arr[i] = min + rand()%(max-min+1)</text>
+                <path class="arrow" d="M160,230 L160,235 L40,235 L40,150 L90,150"/>
+                <rect class="process" x="25" y="223" width="45" height="20" rx="2"/>
+                <text x="47" y="237" font-size="7">i++</text>
+                <path class="arrow" d="M160,240 L160,270"/>
+                <ellipse class="terminal" cx="160" cy="285" rx="30" ry="12"/>
+                <text x="160" y="289">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- printArray -->
+        <div class="diagram-section">
+            <h2>printArray(arr, size)</h2>
+            <svg width="300" height="300" viewBox="0 0 300 300">
+                <ellipse class="terminal" cx="150" cy="22" rx="70" ry="14"/>
+                <text x="150" y="26">printArray(arr, size)</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="90" y="60" width="120" height="25" rx="3"/>
+                <text x="150" y="76">i = 0</text>
+                <path class="arrow" d="M150,85 L150,110"/>
+                <polygon class="decision" points="150,115 220,150 150,185 80,150"/>
+                <text x="150" y="153">i < size?</text>
+                <path class="arrow" d="M220,150 L260,150 L260,210"/>
+                <text class="label" x="235" y="142">Ні</text>
+                <polygon class="io" points="210,215 280,215 270,240 220,240"/>
+                <text x="245" y="231">endl</text>
+                <path class="arrow" d="M245,240 L245,270 L160,270"/>
+                <path class="arrow" d="M150,185 L150,200"/>
+                <text class="label" x="165" y="195">Так</text>
+                <polygon class="io" points="80,205 180,205 170,230 90,230"/>
+                <text x="130" y="221">arr[i]</text>
+                <path class="arrow" d="M130,230 L130,245 L40,245 L40,150 L80,150"/>
+                <rect class="process" x="25" y="233" width="45" height="20" rx="2"/>
+                <text x="47" y="247" font-size="7">i++</text>
+                <ellipse class="terminal" cx="150" cy="285" rx="30" ry="12"/>
+                <text x="150" y="289">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- findMinEvenIndex -->
+        <div class="diagram-section">
+            <h2>findMinEvenIndex(arr, size)</h2>
+            <svg width="340" height="450" viewBox="0 0 340 450">
+                <ellipse class="terminal" cx="170" cy="22" rx="80" ry="14"/>
+                <text x="170" y="26">findMinEvenIndex(arr, size)</text>
+                <path class="arrow" d="M170,36 L170,55"/>
+                <rect class="process" x="60" y="60" width="220" height="25" rx="3"/>
+                <text x="170" y="76">minIndex = -1, minValue = INT_MAX</text>
+                <path class="arrow" d="M170,85 L170,100"/>
+                <rect class="process" x="110" y="105" width="120" height="25" rx="3"/>
+                <text x="170" y="121">i = 0</text>
+                <path class="arrow" d="M170,130 L170,150"/>
+                <polygon class="decision" points="170,155 240,190 170,225 100,190"/>
+                <text x="170" y="193">i < size?</text>
+                <path class="arrow" d="M240,190 L290,190 L290,380 L170,380"/>
+                <text class="label" x="260" y="182">Ні</text>
+                <path class="arrow" d="M170,225 L170,245"/>
+                <text class="label" x="185" y="235">Так</text>
+                <polygon class="decision" points="170,250 250,285 170,320 90,285"/>
+                <text x="170" y="288">arr[i] % 2</text>
+                <text x="170" y="298">== 0?</text>
+                <path class="arrow" d="M170,320 L170,340 L50,340 L50,190 L100,190"/>
+                <text class="label" x="185" y="330">Ні</text>
+                <path class="arrow" d="M90,285 L50,285 L50,315"/>
+                <text class="label" x="72" y="277">Так</text>
+                <polygon class="decision" points="50,320 110,345 50,370 -10,345"/>
+                <text x="50" y="345" font-size="7">arr[i]<minVal?</text>
+                <path class="arrow" d="M-10,345 L-30,345 L-30,375"/>
+                <text class="label" x="-18" y="337">Так</text>
+                <rect class="process" x="-60" y="375" width="100" height="30" rx="2"/>
+                <text x="-10" y="388" font-size="7">minValue = arr[i]</text>
+                <text x="-10" y="400" font-size="7">minIndex = i</text>
+                <rect class="process" x="145" y="325" width="45" height="20" rx="2"/>
+                <text x="167" y="339" font-size="7">i++</text>
+                <path class="arrow" d="M170,380 L170,410"/>
+                <rect class="process" x="100" y="415" width="140" height="25" rx="3"/>
+                <text x="170" y="431">return minIndex</text>
+            </svg>
+        </div>
+        
+        <!-- swapElements -->
+        <div class="diagram-section">
+            <h2>swapElements(a, b)</h2>
+            <svg width="280" height="220" viewBox="0 0 280 220">
+                <ellipse class="terminal" cx="140" cy="22" rx="60" ry="14"/>
+                <text x="140" y="26">swapElements(a, b)</text>
+                <path class="arrow" d="M140,36 L140,60"/>
+                <rect class="process" x="70" y="65" width="140" height="25" rx="3"/>
+                <text x="140" y="81">temp = a</text>
+                <path class="arrow" d="M140,90 L140,115"/>
+                <rect class="process" x="70" y="120" width="140" height="25" rx="3"/>
+                <text x="140" y="136">a = b</text>
+                <path class="arrow" d="M140,145 L140,165"/>
+                <rect class="process" x="70" y="170" width="140" height="25" rx="3"/>
+                <text x="140" y="186">b = temp</text>
+                <path class="arrow" d="M140,195 L140,210"/>
+                <ellipse class="terminal" cx="140" cy="212" rx="30" ry="10"/>
+                <text x="140" y="215">Кінець</text>
+            </svg>
+        </div>
+        
+        <!-- swapFirstWithMinEven -->
+        <div class="diagram-section">
+            <h2>swapFirstWithMinEven(arr, size)</h2>
+            <svg width="340" height="380" viewBox="0 0 340 380">
+                <ellipse class="terminal" cx="170" cy="22" rx="95" ry="14"/>
+                <text x="170" y="26">swapFirstWithMinEven(arr, size)</text>
+                <path class="arrow" d="M170,36 L170,55"/>
+                <rect class="process" x="40" y="60" width="260" height="25" rx="3"/>
+                <text x="170" y="76">minEvenIdx = findMinEvenIndex(arr, size)</text>
+                <path class="arrow" d="M170,85 L170,115"/>
+                <polygon class="decision" points="170,120 255,160 170,200 85,160"/>
+                <text x="170" y="163">minEvenIdx</text>
+                <text x="170" y="173">== -1?</text>
+                <path class="arrow" d="M255,160 L300,160 L300,230"/>
+                <text class="label" x="273" y="152">Так</text>
+                <rect class="process" x="250" y="235" width="80" height="25" rx="3"/>
+                <text x="290" y="251">return false</text>
+                <path class="arrow" d="M85,160 L40,160 L40,215"/>
+                <text class="label" x="65" y="152">Ні</text>
+                <polygon class="decision" points="80,220 155,255 80,290 5,255"/>
+                <text x="80" y="258">minEvenIdx</text>
+                <text x="80" y="268">!= 0?</text>
+                <path class="arrow" d="M5,255 L-20,255 L-20,305"/>
+                <text class="label" x="-5" y="247">Так</text>
+                <rect class="process" x="-60" y="305" width="140" height="25" rx="3"/>
+                <text x="10" y="321" font-size="8">swap(arr[0], arr[minEvenIdx])</text>
+                <path class="arrow" d="M10,330 L10,350 L170,350"/>
+                <path class="arrow" d="M80,290 L80,350 L170,350"/>
+                <path class="arrow" d="M290,260 L290,350 L180,350"/>
+                <path class="arrow" d="M170,350 L170,370"/>
+                <ellipse class="terminal" cx="170" cy="375" rx="40" ry="10"/>
+                <text x="170" y="378">return true</text>
+            </svg>
+        </div>
+        
+        <!-- main -->
+        <div class="diagram-section">
+            <h2>main()</h2>
+            <svg width="300" height="420" viewBox="0 0 300 420">
+                <ellipse class="terminal" cx="150" cy="22" rx="40" ry="14"/>
+                <text x="150" y="26">main()</text>
+                <path class="arrow" d="M150,36 L150,55"/>
+                <rect class="process" x="50" y="60" width="200" height="25" rx="3"/>
+                <text x="150" y="76">srand(time(nullptr))</text>
+                <path class="arrow" d="M150,85 L150,105"/>
+                <rect class="process" x="30" y="110" width="240" height="25" rx="3"/>
+                <text x="150" y="126">fillArray(a, SIZE, MIN, MAX)</text>
+                <path class="arrow" d="M150,135 L150,155"/>
+                <polygon class="io" points="50,160 250,160 240,185 60,185"/>
+                <text x="150" y="176">"Original array:"</text>
+                <path class="arrow" d="M150,185 L150,205"/>
+                <rect class="process" x="50" y="210" width="200" height="25" rx="3"/>
+                <text x="150" y="226">printArray(a, SIZE)</text>
+                <path class="arrow" d="M150,235 L150,255"/>
+                <rect class="process" x="20" y="260" width="260" height="25" rx="3"/>
+                <text x="150" y="276">idx = findMinEvenIndex(a, SIZE)</text>
+                <path class="arrow" d="M150,285 L150,305"/>
+                <polygon class="io" points="40,310 260,310 250,335 50,335"/>
+                <text x="150" y="326">"Min even: a[idx]"</text>
+                <path class="arrow" d="M150,335 L150,355"/>
+                <rect class="process" x="25" y="360" width="250" height="25" rx="3"/>
+                <text x="150" y="376">swapFirstWithMinEven(a, SIZE)</text>
+                <path class="arrow" d="M150,385 L150,405"/>
+                <ellipse class="terminal" cx="150" cy="412" rx="30" ry="10"/>
+                <text x="150" y="415">Кінець</text>
+            </svg>
+        </div>
+    </div>
+    
+    <!-- Results -->
+    <div class="formula-box" style="margin-top: 50px;">
+        <h3>Приклад результату:</h3>
+        <div class="formula" style="font-family: monospace; font-size: 0.9rem;">
+            <b>Original array:</b><br>
+            -7   43   25   28   11    0  -39  -34   13  -50  -13    3  -34<br><br>
+            <b>Minimum even element:</b> -50 at index 9<br>
+            <b>First element:</b> -7 at index 0<br><br>
+            <b>After swapping first with min even:</b><br>
+            -50   43   25   28   11    0  -39  -34   13   -7  -13    3  -34<br><br>
+            ✅ Перший елемент (-7) помінявся з найменшим парним (-50)
+        </div>
+    </div>
+</body>
+</html>
+
